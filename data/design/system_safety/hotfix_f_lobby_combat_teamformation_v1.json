@@ -1,0 +1,56 @@
+{
+  "manifest_id": "hotfix_f_lobby_combat_teamformation_v1_v1",
+  "purpose": "HOTFIX F — READ-ONLY documentazione del consumo di team_formation_v1 (HOTFIX E contract) da parte di lobby launch context e combat preview. Refuse-by-default su missing/empty/ambiguous V1. Preview-only, zero battle simulate, zero reward.",
+  "base_contract": "hotfix_e_team_formation_v1",
+  "scope_routes": {
+    "lobby_launch": "GET /api/lobby/launch-context/preview",
+    "combat_preview": "GET /api/combat/preview"
+  },
+  "consumed_field_v1_slot": {
+    "user_hero_id": "owned id PRIMARIO (NEVER canonical)",
+    "canonical_id": "catalog metadata only (NEVER owned id)",
+    "col": "grid column 0..2",
+    "row": "grid row 0..2"
+  },
+  "blocker_codes": {
+    "lobby": [
+      "LOBBY_TEAMFORMATION_V1_REQUIRED",
+      "LOBBY_TEAMFORMATION_V1_EMPTY",
+      "LOBBY_TEAMFORMATION_V1_AMBIGUOUS"
+    ],
+    "combat_preview": [
+      "COMBAT_PREVIEW_TEAMFORMATION_V1_REQUIRED",
+      "COMBAT_PREVIEW_TEAMFORMATION_V1_EMPTY",
+      "COMBAT_PREVIEW_TEAMFORMATION_V1_AMBIGUOUS"
+    ]
+  },
+  "preview_only_invariants": {
+    "reward_status": "DISABLED",
+    "progress_status": "DISABLED",
+    "battle_simulate": "BLOCKED_PRE_QA_HOTFIX_A_FAIL_CLOSED",
+    "battle_engine_import": "FORBIDDEN",
+    "db_writes": "FORBIDDEN",
+    "new_mutating_endpoint": "FORBIDDEN"
+  },
+  "frontend_consumers": {
+    "pre_battle_lobby_tsx": "prefer team_formation_v1; warnings logged; user_hero_id primary",
+    "combat_tsx": "diagnostic log of v1 slots/warnings; guard PREVIEW_REWARD_LOCK_ACTIVE preserved"
+  },
+  "invariants_preserved": [
+    "Hotfix A battle_simulate_guard",
+    "Hotfix A JWT preflight",
+    "Hotfix B ApiError/apiCallWithMeta",
+    "Hotfix C server-select fail-closed",
+    "Hotfix D starter contract + user_heroes exposure",
+    "Hotfix E TeamFormation V1 contract + snapshot alignment"
+  ],
+  "out_of_scope_for_hotfix_f": [
+    "battle_engine authoritative runtime",
+    "live combat",
+    "rewards",
+    "gacha/shop/VIP/Battle Pass/mail",
+    "heroes.tsx filtered.map bug",
+    "BATTLE_SIMULATE_LIVE_ENABLED residual P1",
+    "DB migration team_formation legacy"
+  ]
+}

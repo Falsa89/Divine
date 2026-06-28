@@ -30,6 +30,22 @@ import {
 // LEGACY_COMBAT_ENTRY_MUTATING: se combat parte senza launch_context, il
 // backend legacy /api/battle/simulate resta mutante (realta' attuale onesta);
 // segnaliamo l'utente con badge dedicato e log dev.
+//
+// HOTFIX F — TeamFormation V1 consumption marker.
+// Quando il launch_context preview arriva con `team_formation_v1`, il combat
+// view DEVE preferire `user_hero_id` come owned id primario e NON trattare
+// `canonical_id` come owned id. Nessuna nuova chiamata a /api/battle/simulate
+// è introdotta da HOTFIX F: i guard PREVIEW_REWARD_LOCK_ACTIVE e
+// LEGACY_COMBAT_ENTRY_MUTATING restano attivi, e Hotfix A garantisce il
+// fail-closed lato backend. Se launch_context segnala blocker V1
+// (LOBBY_TEAMFORMATION_V1_* / COMBAT_PREVIEW_TEAMFORMATION_V1_*), il combat
+// view NON costruisce team locale.
+type HotfixFLaunchContextV1Slot = {
+  user_hero_id: string;
+  canonical_id: string;
+  col: number;
+  row: number;
+};
 import BattleSprite from '../components/BattleSprite';
 import { heroBattleImageSource, heroPortraitSource, GREEK_HOPLITE_COMBAT_BASE, getHeroBattlePreloadAssets } from '../components/ui/hopliteAssets';
 import { HOPLITE_BATTLE_ASSET_MANIFEST } from '../components/ui/hopliteAssetManifest';
@@ -386,6 +402,29 @@ export default function CombatScreen() {
     if (PREVIEW_REWARD_LOCK_ACTIVE) {
       if (__DEV__) console.log('[pack_125] PREVIEW_COMBAT_REAL: action loop + preload, skipping simulate');
       const previewCtxLocal = previewContextFromParams(params as Record<string, unknown>);
+      // HOTFIX F — se il launch_context preview espone team_formation_v1
+      // (HOTFIX E contract), logghiamo i warnings e blocchiamo se segnala
+      // missing/empty/ambiguous (preview-only diagnostic, no team locale
+      // costruito dietro al blocker backend).
+      const v1Slots: HotfixFLaunchContextV1Slot[] = Array.isArray(
+        (previewCtxLocal as any)?.team_formation_v1,
+      )
+        ? ((previewCtxLocal as any).team_formation_v1 as HotfixFLaunchContextV1Slot[])
+        : [];
+      const v1Warnings: any[] = Array.isArray(
+        (previewCtxLocal as any)?.team_formation_v1_warnings,
+      )
+        ? ((previewCtxLocal as any).team_formation_v1_warnings as any[])
+        : [];
+      if (__DEV__ && v1Warnings.length > 0) {
+        console.warn('[hotfix_f][combat] team_formation_v1 warnings:', v1Warnings);
+      }
+      if (__DEV__ && v1Slots.length > 0) {
+        console.log(
+          '[hotfix_f][combat] team_formation_v1 slots:',
+          v1Slots.map(s => ({ uh: s.user_hero_id, c: s.canonical_id, col: s.col, row: s.row })),
+        );
+      }
       const snap = buildPreviewCombatSnapshot(previewCtxLocal);
       if (!snap) {
         // fail-closed: ctx incoerente → manteniamo schermata preview_locked legacy.

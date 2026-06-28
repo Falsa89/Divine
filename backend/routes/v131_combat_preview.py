@@ -35,6 +35,15 @@ async def combat_preview(
     server_id: Optional[str] = Query(default=None),
     authorization: Optional[str] = Header(default=None),
 ):
+    """Pack 131 / HOTFIX F — combat preview READ-ONLY.
+
+    Consuma `team_formation_v1` da launch_context (HOTFIX E contract):
+      - user_hero_id resta owned id primario;
+      - canonical_id è solo catalog metadata;
+      - blocca su missing/empty/ambiguous V1;
+      - NESSUNA chiamata a /api/battle/simulate (Hotfix A fail-closed BE);
+      - NESSUN reward / progress / battle_engine.
+    """
     current_user = await _resolve_user(authorization)
     user_id = current_user.get('id')
     from server import db as _db
@@ -44,6 +53,42 @@ async def combat_preview(
     if not launch.get('ok'):
         raise HTTPException(status_code=launch.get('status_code', 400), detail=launch.get('detail'))
     snap = launch.get('player_snapshot', {})
+    # HOTFIX F — Estrazione + blocking su team_formation_v1.
+    team_formation_v1 = snap.get('team_formation_v1') or []
+    team_formation_v1_warnings = snap.get('team_formation_v1_warnings') or []
+    if not isinstance(team_formation_v1, list):
+        raise HTTPException(
+            status_code=400,
+            detail={
+                'blocker': 'COMBAT_PREVIEW_TEAMFORMATION_V1_REQUIRED',
+                'message': 'team_formation_v1 mancante dal launch context.',
+                'route': '/api/combat/preview',
+            },
+        )
+    if len(team_formation_v1) == 0:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                'blocker': 'COMBAT_PREVIEW_TEAMFORMATION_V1_EMPTY',
+                'message': 'team_formation_v1 vuota: combat preview non costruibile.',
+                'team_formation_v1_warnings': team_formation_v1_warnings,
+                'route': '/api/combat/preview',
+            },
+        )
+    ambiguous = [
+        w for w in team_formation_v1_warnings
+        if isinstance(w, dict) and w.get('blocker') == 'TEAM_FORMATION_LEGACY_AMBIGUOUS'
+    ]
+    if ambiguous:
+        raise HTTPException(
+            status_code=409,
+            detail={
+                'blocker': 'COMBAT_PREVIEW_TEAMFORMATION_V1_AMBIGUOUS',
+                'message': 'Almeno uno slot legacy non disambiguabile in V1.',
+                'ambiguous_warnings': ambiguous,
+                'route': '/api/combat/preview',
+            },
+        )
     combat_input = build_combat_preview_input(snap, mode=mode, server_id=server_id or '')
     post = build_post_battle_preview()
     return {
@@ -54,6 +99,16 @@ async def combat_preview(
         'server_id': server_id,
         'preview_only': True,
         'authoritative': False,
+        # HOTFIX F — esposizione V1 al top-level del preview per consumer FE.
+        'team_formation_v1': team_formation_v1,
+        'team_formation_v1_warnings': team_formation_v1_warnings,
+        'team_formation_v1_size': len(team_formation_v1),
+        'hotfix_f_combat_preview_consumes_v1': True,
+        # Lock attivi (Hotfix A + Hotfix F preview-only invariant).
+        'reward_status': 'DISABLED',
+        'progress_status': 'DISABLED',
+        'battle_simulate_status': 'BLOCKED_PRE_QA_HOTFIX_A_FAIL_CLOSED',
+        'combat_preview_reward_lock_active': True,
         **combat_input,
         **post,
         'device_qa_status': 'BLOCKED',

@@ -180,14 +180,33 @@ function resolvePlayerFormation(): { team: EnemyUnit[]; source: FormationSourceL
   return { team: PLAYER_SAFE_FALLBACK_TEAM, source: 'blocked_no_team_for_server', fallback_used: true };
 }
 
-// Pack 80 — Stato runtime del fetch reale del team formation.
+// Pack 80 / HOTFIX F — Stato runtime del fetch reale del team formation.
+// HOTFIX F: backend ora espone `team_formation_v1` (forma canonica
+// HOTFIX E) accanto a `team_formation` raw. user_hero_id resta owned
+// id primario; canonical_id è metadata. Non trattare canonical_id come
+// owned id.
+type TeamFormationV1Slot = {
+  user_hero_id: string;
+  canonical_id: string;
+  col: number;
+  row: number;
+};
+type TeamFormationV1Warning = {
+  index: number;
+  blocker: string;
+  raw_entry?: any;
+};
 type GetFormationResponse = {
   authenticated?: boolean;
   server_id?: string | null;
   filter_applied?: boolean;
   source?: string;
   profile_id?: string | null;
-  team_formation?: Array<{ user_hero_id?: string; x?: number; y?: number }>;
+  team_formation?: { user_hero_id?: string; x?: number; y?: number }[];
+  // HOTFIX F — preferred shape: V1 normalized.
+  team_formation_v1?: TeamFormationV1Slot[];
+  team_formation_v1_warnings?: TeamFormationV1Warning[];
+  team_formation_contract_version?: string;
   blocker?: string | null;
   psp_present_for_server?: boolean;
   fallback_used?: boolean;
@@ -506,29 +525,53 @@ export default function PreBattleLobbyScreen() {
           if (h.hero_id) heroMap[String(h.hero_id)] = h;
           if (h.canonical_id) heroMap[String(h.canonical_id)] = h;
         });
-        const tf = Array.isArray(d.team_formation) ? d.team_formation : (Array.isArray((d as any).formation) ? (d as any).formation : []);
+        // HOTFIX F — Preferisce `team_formation_v1` (HOTFIX E contract).
+        // user_hero_id è SEMPRE owned id primario; canonical_id è solo
+        // catalog metadata (NON owned id). Se manca, fallback minimo a
+        // team_formation legacy SOLO se la V1 non è arrivata; in ogni caso
+        // NON costruiamo un team locale se il backend segnala blocker V1.
+        const tfV1Raw = Array.isArray((d as any).team_formation_v1)
+          ? (d as any).team_formation_v1
+          : null;
+        const tfWarnings: TeamFormationV1Warning[] =
+          Array.isArray((d as any).team_formation_v1_warnings)
+            ? (d as any).team_formation_v1_warnings
+            : [];
+        const tfLegacy = Array.isArray(d.team_formation)
+          ? d.team_formation
+          : Array.isArray((d as any).formation)
+          ? (d as any).formation
+          : [];
+        const tf = tfV1Raw && tfV1Raw.length > 0 ? tfV1Raw : tfLegacy;
+        if (__DEV__ && tfWarnings.length > 0) {
+          console.warn('[hotfix_f][pre-battle-lobby] team_formation_v1 warnings:', tfWarnings);
+        }
         const slots: EnemyUnit[] = tf
-          // Pack 126-FIX-B — adapter contract robusto:
-          //   - filtra per chiave eroe non-vuota tra user_hero_id | hero_id | canonical_id;
-          //   - lookup nel roster con triplo predicato (id | hero_id | canonical_id);
-          //   - posizioni: col/row (Pack 125+) o x/y (legacy).
+          // HOTFIX F — adapter contract V1-aware:
+          //   - V1 (Pack 125+ post HOTFIX E): chiave = user_hero_id.
+          //   - Legacy fallback: filtra per qualunque user_hero_id | hero_id | canonical_id
+          //     ma usa user_hero_id come PRIMA preferenza per evitare ambiguità.
+          //   - posizioni: col/row (V1) o x/y (legacy).
           .filter((e: any) => e && (e.user_hero_id || e.hero_id || e.canonical_id))
           .slice(0, PLAYER_SLOT_COUNT)
           .map((e: any) => {
-            const heroKey = String(e.user_hero_id || e.hero_id || e.canonical_id);
-            // Lookup robusto: id (Pack 87), hero_id (Pack 125+), canonical_id.
-            const h = (heroMap[heroKey] || (heroes as any[]).find((hh: any) =>
-              hh?.id === heroKey || hh?.hero_id === heroKey || hh?.canonical_id === heroKey
+            // HOTFIX F — user_hero_id ha PRIORITÀ ASSOLUTA come owned id.
+            // canonical_id viene tentato solo se user_hero_id assente
+            // (caso legacy raw, ormai eccezionale post-HOTFIX E).
+            const ownedKey = String(e.user_hero_id || e.hero_id || '');
+            const canonicalHint = String(e.canonical_id || e.hero_id || '');
+            const lookupKey = ownedKey || canonicalHint;
+            // Lookup robusto: id (Pack 87 owned), hero_id (Pack 125+ canonical), canonical_id.
+            const h = (heroMap[lookupKey] || (heroes as any[]).find((hh: any) =>
+              hh?.id === lookupKey || hh?.hero_id === lookupKey || hh?.canonical_id === lookupKey
             )) || {};
             const role = (h.role || h.class || 'dps').toString().toLowerCase();
             return {
-              hero_id: h.hero_id || heroKey,
+              hero_id: h.hero_id || canonicalHint || lookupKey,
               role: ROLE_COLOR[role] ? role : 'dps',
               level: Number(h.level || 1),
               stars: Number(h.stars || 1),
               power: Number(h.power || 0),
-              // Pack 126-FIX-B / FIX E — usa nome reale dell'eroe, mai placeholder
-              // per il player team. Se mancante, marca esplicitamente "—".
               name: String(h.hero_name || h.name || '\u2014'),
               hero_image: h.hero_image || h.image || null,
             } as any;

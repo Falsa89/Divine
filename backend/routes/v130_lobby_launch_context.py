@@ -53,6 +53,8 @@ async def lobby_launch_context_preview(
     authorization: Optional[str] = Header(default=None),
 ):
     """Pack 130 — launch context preview, read-only.
+    HOTFIX F — esposizione + blocking su `team_formation_v1` (HOTFIX E
+    contract). Refuse-by-default se la V1 risulta missing/empty/ambiguous.
 
     Args via query:
       mode: una delle training/story/boss/tower/event/arena.
@@ -69,4 +71,52 @@ async def lobby_launch_context_preview(
             status_code=result.get('status_code', 400),
             detail=result.get('detail'),
         )
+    # HOTFIX F — Estrai team_formation_v1 dallo snapshot Pack 130 (esposto
+    # da HOTFIX E in `real_player_snapshot.build_real_player_snapshot`).
+    snapshot = result.get('player_snapshot') or {}
+    team_formation_v1 = snapshot.get('team_formation_v1') or []
+    team_formation_v1_warnings = snapshot.get('team_formation_v1_warnings') or []
+    # Refuse-by-default: blocca se la V1 è missing/empty/ambiguous.
+    if not isinstance(team_formation_v1, list):
+        raise HTTPException(
+            status_code=400,
+            detail={
+                'blocker': 'LOBBY_TEAMFORMATION_V1_REQUIRED',
+                'message': 'team_formation_v1 mancante dallo snapshot.',
+                'route': '/api/lobby/launch-context/preview',
+            },
+        )
+    if len(team_formation_v1) == 0:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                'blocker': 'LOBBY_TEAMFORMATION_V1_EMPTY',
+                'message': 'team_formation_v1 è vuoto dopo normalizzazione HOTFIX E.',
+                'team_formation_v1_warnings': team_formation_v1_warnings,
+                'route': '/api/lobby/launch-context/preview',
+            },
+        )
+    ambiguous = [
+        w for w in team_formation_v1_warnings
+        if isinstance(w, dict) and w.get('blocker') == 'TEAM_FORMATION_LEGACY_AMBIGUOUS'
+    ]
+    if ambiguous:
+        raise HTTPException(
+            status_code=409,
+            detail={
+                'blocker': 'LOBBY_TEAMFORMATION_V1_AMBIGUOUS',
+                'message': 'Almeno uno slot legacy non disambiguabile in V1.',
+                'ambiguous_warnings': ambiguous,
+                'route': '/api/lobby/launch-context/preview',
+            },
+        )
+    # Propaga V1 al top-level per visibility downstream (combat preview,
+    # frontend pre-battle-lobby). user_hero_id resta owned id primario;
+    # canonical_id è metadata. NO DB writes, NO reward, NO mutations.
+    result['team_formation_v1'] = team_formation_v1
+    result['team_formation_v1_warnings'] = team_formation_v1_warnings
+    result['team_formation_v1_size'] = len(team_formation_v1)
+    result['hotfix_f_lobby_consumes_v1'] = True
+    result['reward_status'] = 'DISABLED'
+    result['progress_status'] = 'DISABLED'
     return result
