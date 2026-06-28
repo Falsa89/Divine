@@ -25,6 +25,40 @@ aabaf8e2ee1642ca067fe9a48406ccdfc95a0eab
 
 (HOTFIX G truth-sync, baseline da prompt).
 
+## 2.bis) Catena commit FIX 543
+
+```text
+aabaf8e2ee1642ca067fe9a48406ccdfc95a0eab  HOTFIX G truth-sync (BASELINE)
+  ↓
+f334ead92                                  Auto-pipeline .emergent/emergent.yml (+1/-1, non-code)
+  ↓
+571d6d3f5                                  Auto-pipeline .emergent/emergent.yml (+1/-1, non-code)
+  ↓
+df6467cfd                                  COMMIT CONTENUTO FIX 543
+                                           "auto-commit for 8a1cc320-d57f-429c-8d83-37442bfa5948"
+                                           Emergent Pack 125 Agent, 2026-06-28 23:12:26 UTC
+                                           3 file di scope, +646 / -3:
+                                           - frontend/app/(tabs)/battle.tsx               +44/-3
+                                           - backend/scripts/validate_fix_team_server_required_scope_ready.py  +231 (new)
+                                           - docs/divine/543_FIX_TEAM_SERVER_REQUIRED_SCOPE_READY.md           +371 (new, con TRUTH_SYNC_PENDING)
+  ↓
+c56ede909                                  Auto-pipeline .emergent/emergent.yml (+1/-1, non-code)
+  ↓
+[truth-sync commit]                        Truth-sync di questo report
+                                           (sostituisce i placeholder con gli SHA reali sopra).
+                                           SHA visibile in `git log` post-commit come HEAD finale FIX 543.
+```
+
+### 2.ter) SHA finali FIX 543
+
+| Etichetta | SHA |
+|---|---|
+| Baseline ufficiale (HOTFIX G) | `aabaf8e2ee1642ca067fe9a48406ccdfc95a0eab` |
+| Auto-pipeline pre-commit (metadata) | `f334ead92`, `571d6d3f5` |
+| **Commit contenuto FIX 543** | **`df6467cfd00c6a7a7632e48f4f739a07a5c1cdea`** |
+| Auto-pipeline post-commit (metadata) | `c56ede909` |
+| HEAD finale FIX 543 (truth-sync) | visibile in `git log` post-commit |
+
 ## 3) File modificati
 
 ```text
@@ -348,6 +382,22 @@ richiede:
 4. verifica che la UI passi da `ActivityIndicator` → roster popolato
    (NON `SERVER_REQUIRED`),
 5. logout/cambio server → ritorno a Battaglia → verifica re-load.
+
+### 14.bis) Esito device-side post-FIX 543 (riportato dall'utente)
+
+```text
+La schermata "FORMAZIONE SQUADRA" non mostra più SERVER_REQUIRED.
+Gli eroi sono visibili e possono essere mossi nel team.
+```
+
+Questo conferma che il fix scope-ready guard chiude effettivamente la
+race condition `useServerScope` → `loadData()`. Lo stato `Device QA`
+resta comunque `MANUAL_REQUIRED` perché:
+
+- non è stata eseguita una checklist QA completa (cambio server, logout,
+  modalità offline, restart a freddo dopo update OTA);
+- la verifica utente è osservazionale single-path, non un piano di
+  validazione device-side strutturato.
 
 ## 15) Release ready = NO
 
