@@ -1,0 +1,64 @@
+{
+  "manifest_id": "hotfix_g_frontend_lobby_combat_v1_v1",
+  "purpose": "HOTFIX G — READ-ONLY documentazione della propagazione frontend di team_formation_v1 (HOTFIX E contract) da pre-battle-lobby.tsx verso combat.tsx tramite il payload JSON di launch_context. Refuse-by-default su missing/empty/ambiguous/size_mismatch/canonical_as_owned. Preview-only, zero battle simulate, zero reward.",
+  "base_contract": "hotfix_f_lobby_combat_teamformation_v1",
+  "propagation_path": {
+    "step_1": "pre-battle-lobby.tsx fetcha GET /api/team/get-formation -> team_formation_v1 + team_formation_v1_warnings",
+    "step_2": "pre-battle-lobby.tsx salva V1 in state hotfixGTeamV1 / hotfixGTeamV1Warnings",
+    "step_3": "startBattle() costruisce launchContext { ... team_formation_v1, team_formation_v1_warnings, team_formation_v1_size, hotfix_g_frontend_v1_propagation: true }",
+    "step_4": "router.push(/combat?launch_context=<JSON stringified>)",
+    "step_5": "combat.tsx parsifica JSON.parse(params.launch_context) -> hotfixGRawLaunchContext",
+    "step_6": "combat.tsx valida V1: REQUIRED / AMBIGUOUS / SIZE_MISMATCH / CANONICAL_AS_OWNED",
+    "step_7": "on blocker -> setPhase('preview_locked') early-return (no buildPreviewCombatSnapshot, no simulate, no reward)"
+  },
+  "consumed_field_v1_slot": {
+    "user_hero_id": "owned id PRIMARIO (NEVER canonical)",
+    "canonical_id": "catalog metadata only (NEVER owned id)",
+    "col": "grid column 0..2",
+    "row": "grid row 0..2"
+  },
+  "frontend_blocker_codes": {
+    "pre_battle_lobby": [
+      "FRONTEND_LOBBY_TEAMFORMATION_V1_REQUIRED",
+      "FRONTEND_LOBBY_TEAMFORMATION_V1_AMBIGUOUS"
+    ],
+    "combat": [
+      "FRONTEND_COMBAT_TEAMFORMATION_V1_REQUIRED",
+      "FRONTEND_COMBAT_TEAMFORMATION_V1_AMBIGUOUS",
+      "FRONTEND_COMBAT_TEAMFORMATION_V1_SIZE_MISMATCH",
+      "FRONTEND_COMBAT_TEAMFORMATION_V1_CANONICAL_AS_OWNED"
+    ]
+  },
+  "preview_only_invariants": {
+    "reward_status": "DISABLED",
+    "progress_status": "DISABLED",
+    "battle_simulate": "BLOCKED_PRE_QA_HOTFIX_A_FAIL_CLOSED",
+    "battle_engine_import": "FORBIDDEN",
+    "db_writes": "FORBIDDEN",
+    "new_mutating_endpoint": "FORBIDDEN",
+    "refresh_user_in_preview": "BLOCKED",
+    "grant_affinity_in_preview": "BLOCKED"
+  },
+  "invariants_preserved": [
+    "Hotfix A battle_simulate_guard",
+    "Hotfix A JWT preflight",
+    "Hotfix B ApiError/apiCallWithMeta",
+    "Hotfix C server-select fail-closed",
+    "Hotfix D starter contract + user_heroes exposure",
+    "Hotfix E TeamFormation V1 contract + snapshot alignment",
+    "Hotfix F lobby/combat preview backend consumption V1"
+  ],
+  "out_of_scope_for_hotfix_g": [
+    "backend authoritative runtime",
+    "live combat",
+    "rewards",
+    "gacha/shop/VIP/Battle Pass/mail",
+    "heroes.tsx filtered.map bug (P2)",
+    "BATTLE_SIMULATE_LIVE_ENABLED residual P1",
+    "DB migration team_formation legacy",
+    "combat_preview_adapter explicit V1 marker (HOTFIX H candidate)"
+  ],
+  "device_qa_status": "MANUAL_REQUIRED",
+  "release_ready": false,
+  "secure_or_anti_hack_safe": false
+}

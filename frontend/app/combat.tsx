@@ -402,30 +402,67 @@ export default function CombatScreen() {
     if (PREVIEW_REWARD_LOCK_ACTIVE) {
       if (__DEV__) console.log('[pack_125] PREVIEW_COMBAT_REAL: action loop + preload, skipping simulate');
       const previewCtxLocal = previewContextFromParams(params as Record<string, unknown>);
-      // HOTFIX F — se il launch_context preview espone team_formation_v1
+      // HOTFIX G — Estrazione V1 dal payload JSON di `launch_context` (router
+      // param valorizzato da `pre-battle-lobby.tsx`). NON da `previewCtxLocal`
+      // (che non contiene team_formation_v1) e NON da
+      // `parseLaunchContextFromParams` (che non espone V1). Refuse-by-default:
+      // se il JSON e' malformato o assente, blocker fail-closed.
+      let hotfixGRawLaunchContext: any = null;
+      try {
+        const rawLc = (params as any)?.launch_context;
+        if (typeof rawLc === 'string' && rawLc.length > 0) {
+          hotfixGRawLaunchContext = JSON.parse(rawLc);
+        } else if (rawLc && typeof rawLc === 'object') {
+          hotfixGRawLaunchContext = rawLc;
+        }
+      } catch (_e) {
+        hotfixGRawLaunchContext = null;
+      }
+      // HOTFIX F/G — se il launch_context preview espone team_formation_v1
       // (HOTFIX E contract), logghiamo i warnings e blocchiamo se segnala
       // missing/empty/ambiguous (preview-only diagnostic, no team locale
-      // costruito dietro al blocker backend).
+      // costruito dietro al blocker backend). owned id primario =
+      // user_hero_id; canonical_id resta SOLO metadata.
       const v1Slots: HotfixFLaunchContextV1Slot[] = Array.isArray(
-        (previewCtxLocal as any)?.team_formation_v1,
+        hotfixGRawLaunchContext?.team_formation_v1,
       )
-        ? ((previewCtxLocal as any).team_formation_v1 as HotfixFLaunchContextV1Slot[])
+        ? (hotfixGRawLaunchContext.team_formation_v1 as HotfixFLaunchContextV1Slot[])
         : [];
       const v1Warnings: any[] = Array.isArray(
-        (previewCtxLocal as any)?.team_formation_v1_warnings,
+        hotfixGRawLaunchContext?.team_formation_v1_warnings,
       )
-        ? ((previewCtxLocal as any).team_formation_v1_warnings as any[])
+        ? (hotfixGRawLaunchContext.team_formation_v1_warnings as any[])
         : [];
+      const v1SizeDeclared: number = Number.isFinite(
+        hotfixGRawLaunchContext?.team_formation_v1_size,
+      )
+        ? Number(hotfixGRawLaunchContext.team_formation_v1_size)
+        : -1;
       // HOTFIX G — guard fail-closed sulla V1 nel preview path. Refuse-by-default.
-      // owned id primario = user_hero_id; canonical_id solo metadata.
       const v1Ambiguous = v1Warnings.filter(
         (w: any) => w?.blocker === 'TEAM_FORMATION_LEGACY_AMBIGUOUS',
+      );
+      // HOTFIX G — Diniego se size dichiarata != slots reali (anti-tamper).
+      const v1SizeMismatch =
+        v1SizeDeclared >= 0 && v1SizeDeclared !== v1Slots.length;
+      // HOTFIX G — Diniego se uno slot usa canonical_id come owned id
+      // (user_hero_id mancante o == canonical_id).
+      const v1CanonicalAsOwned = v1Slots.some(
+        (s: any) =>
+          !s ||
+          typeof s.user_hero_id !== 'string' ||
+          s.user_hero_id.length === 0 ||
+          s.user_hero_id === s.canonical_id,
       );
       const hotfixGV1Blocker: string | null =
         !Array.isArray(v1Slots) || v1Slots.length === 0
           ? 'FRONTEND_COMBAT_TEAMFORMATION_V1_REQUIRED'
           : v1Ambiguous.length > 0
           ? 'FRONTEND_COMBAT_TEAMFORMATION_V1_AMBIGUOUS'
+          : v1SizeMismatch
+          ? 'FRONTEND_COMBAT_TEAMFORMATION_V1_SIZE_MISMATCH'
+          : v1CanonicalAsOwned
+          ? 'FRONTEND_COMBAT_TEAMFORMATION_V1_CANONICAL_AS_OWNED'
           : null;
       if (__DEV__ && v1Warnings.length > 0) {
         console.warn('[hotfix_f][combat] team_formation_v1 warnings:', v1Warnings);
@@ -440,11 +477,18 @@ export default function CombatScreen() {
         if (__DEV__) console.warn('[hotfix_g][combat] V1 blocker, no fake team:', {
           blocker: hotfixGV1Blocker,
           v1_size: v1Slots.length,
+          v1_size_declared: v1SizeDeclared,
           ambiguous_count: v1Ambiguous.length,
+          canonical_as_owned: v1CanonicalAsOwned,
         });
-        // Preview-only: NON costruiamo snapshot locale. Lasciamo il branch
-        // sotto a `buildPreviewCombatSnapshot` solo come fallback se context
-        // V1 manca, ma marchiamo l'errore. NO /api/battle/simulate. NO reward.
+        // HOTFIX G — Fail-closed: NIENTE snapshot locale, NIENTE simulate,
+        // NIENTE reward. Restiamo in schermata preview_locked diagnostica.
+        // NO /api/battle/simulate. NO refreshUser. NO grantAffinity.
+        setPhase('preview_locked' as any);
+        setError('');
+        setLogLines([]);
+        logLinesRef.current = [];
+        return;
       }
       const snap = buildPreviewCombatSnapshot(previewCtxLocal);
       if (!snap) {
