@@ -22,10 +22,17 @@ async def _resolve_user(authorization: Optional[str]):
         raise HTTPException(status_code=401, detail="Token scaduto")
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Token non valido")
-    from server import db as _db
-    user = await _db.users.find_one({"id": payload["user_id"]})
+    from server import db as _db, _latest_logout_cutoff, _token_issued_at
+    issued_at = _token_issued_at(payload)
+    user_id = payload.get("user_id")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Token non valido")
+    user = await _db.users.find_one({"id": user_id})
     if not user:
         raise HTTPException(status_code=401, detail="Utente non trovato")
+    logout_cutoff = _latest_logout_cutoff(user)
+    if logout_cutoff and issued_at < logout_cutoff:
+        raise HTTPException(status_code=401, detail="Token revocato")
     return user
 
 
