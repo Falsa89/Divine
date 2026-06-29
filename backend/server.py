@@ -1558,9 +1558,22 @@ def resolve_hero_faction(name: str, existing: str | None = None) -> str | None:
         return existing
     return HERO_FACTION_MAP.get(name)
 
+def _env_flag_enabled(name: str) -> bool:
+    return os.getenv(name, "").strip().lower() in {"1", "true", "yes", "on"}
+
+def _explicit_startup_bot_server_id() -> str:
+    server_id = os.getenv("DIVINE_STARTUP_BOT_SERVER_ID", "").strip()
+    if not server_id or server_id.lower() == "default":
+        return ""
+    return server_id
+
 @app.on_event("startup")
 async def seed_database():
     """Seed heroes if not present"""
+    if not _env_flag_enabled("DIVINE_ALLOW_STARTUP_SEED_WRITES"):
+        print("Startup seed SKIPPED: DIVINE_ALLOW_STARTUP_SEED_WRITES is not enabled")
+        return
+
     count = await db.heroes.count_documents({})
     if count >= 30:
         # Migrazione one-shot: popola il campo faction sui record DB esistenti
@@ -1637,26 +1650,36 @@ async def start_bot_system():
     """Initialize bots and start background cycle.
 
     v108_POSTQA_A — Hard kill switch onesto: env BOTS_DISABLED=true disabilita
-    completamente bots startup + cycle. Default OFF (comportamento legacy mantenuto)
-    ma l'invariante runtime ora prevede un kill switch reale presente.
+    Pack 3: startup bots are disabled by default and require explicit opt-in
+    plus an explicit non-default server id.
     """
     global bot_task_handle
     # v108_POSTQA_A hard kill switch (BOTS_DISABLED / BOT_KILL_SWITCH)
     if os.environ.get("BOTS_DISABLED", "").lower() == "true" or os.environ.get("BOT_KILL_SWITCH", "").lower() == "true":
-        print("[v108_POSTQA_A] BOTS_DISABLED=true: skipping initialize_bots('default') and run_bot_cycle('default')")
+        print("[v108_POSTQA_A] BOTS_DISABLED=true: skipping startup bot initialization and cycle")
         return
+
+    if not _env_flag_enabled("DIVINE_ENABLE_STARTUP_BOTS"):
+        print("Bot system SKIPPED: DIVINE_ENABLE_STARTUP_BOTS is not enabled")
+        return
+
+    bot_server_id = _explicit_startup_bot_server_id()
+    if not bot_server_id:
+        print("Bot system SKIPPED: DIVINE_STARTUP_BOT_SERVER_ID must be explicit and not 'default'")
+        return
+
     # Wait for DB to be ready
     await asyncio.sleep(5)
     try:
-        count = await initialize_bots("default", 20)
-        print(f"Bot system ready: {count} bots on server 'default'")
+        count = await initialize_bots(bot_server_id, 20)
+        print(f"Bot system ready: {count} bots on server '{bot_server_id}'")
     except Exception as e:
         print(f"Bot init error: {e}")
     
     # Start background task
-    bot_task_handle = asyncio.create_task(bot_background_loop())
+    bot_task_handle = asyncio.create_task(bot_background_loop(bot_server_id))
 
-async def bot_background_loop():
+async def bot_background_loop(server_id: str):
     """Run bot actions every 3-5 minutes.
 
     v108_POSTQA_A — Hard kill switch: env BOTS_DISABLED=true esce dal loop.
@@ -1668,7 +1691,7 @@ async def bot_background_loop():
                 print("[v108_POSTQA_A] BOTS_DISABLED=true: exiting bot_background_loop")
                 return
             await asyncio.sleep(random.randint(180, 300))  # 3-5 min
-            await run_bot_cycle("default")
+            await run_bot_cycle(server_id)
         except asyncio.CancelledError:
             break
         except Exception as e:
@@ -1685,8 +1708,11 @@ async def admin_run_bot_cycle(current_user: dict = Depends(get_current_user)):
     # v108_POSTQA_A hard kill switch (BOTS_DISABLED / BOT_KILL_SWITCH)
     if os.environ.get("BOTS_DISABLED", "").lower() == "true" or os.environ.get("BOT_KILL_SWITCH", "").lower() == "true":
         return {"success": False, "error": "BOTS_DISABLED=true (v108_POSTQA_A kill switch)"}
+    bot_server_id = os.getenv("DIVINE_MANUAL_BOT_SERVER_ID", "").strip()
+    if not bot_server_id or bot_server_id.lower() == "default":
+        return {"success": False, "error": "DIVINE_MANUAL_BOT_SERVER_ID must be explicit and not 'default'"}
     try:
-        await run_bot_cycle("default")
+        await run_bot_cycle(bot_server_id)
         return {"success": True, "message": "Bot cycle completed"}
     except Exception as e:
         return {"success": False, "error": str(e)}

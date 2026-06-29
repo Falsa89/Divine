@@ -109,6 +109,12 @@ async def get_db():
     client = AsyncIOMotorClient(MONGO_URL)
     return client[DB_NAME]
 
+def require_explicit_bot_server_id(server_id: Optional[str]) -> str:
+    normalized = (server_id or "").strip()
+    if not normalized or normalized.lower() == "default":
+        raise ValueError("Explicit bot server_id required; refusing implicit 'default'")
+    return normalized
+
 
 async def generate_bot_chat(bot_name: str, personality: str, context: str = "") -> str:
     """Generate a chat message using LLM that sounds like a real player."""
@@ -188,8 +194,9 @@ def _fallback_chat(personality: str) -> str:
     return random.choice(pool)
 
 
-async def create_bot_profile(db, tier: str, server_id: str = "default") -> dict:
+async def create_bot_profile(db, tier: str, server_id: Optional[str] = None) -> dict:
     """Create a new bot player with full profile."""
+    server_id = require_explicit_bot_server_id(server_id)
     config = AI_TIERS[tier]
     name = random.choice(ITALIAN_NAMES) + str(random.randint(1, 999))
     personality = random.choice(config["personality_pool"])
@@ -413,8 +420,9 @@ async def bot_action_cycle(db, bot_user: dict):
     return actions_done
 
 
-async def run_bot_cycle(server_id: str = "default"):
+async def run_bot_cycle(server_id: Optional[str] = None):
     """Run one cycle of bot actions for all bots on a server."""
+    server_id = require_explicit_bot_server_id(server_id)
     db = await get_db()
     bots = await db.users.find({"is_bot": True, "bot_server": server_id}).to_list(100)
     
@@ -440,8 +448,9 @@ async def run_bot_cycle(server_id: str = "default"):
         await asyncio.sleep(random.uniform(0.5, 2.0))
 
 
-async def initialize_bots(server_id: str = "default", count: int = 20):
+async def initialize_bots(server_id: Optional[str] = None, count: int = 20):
     """Initialize bots for a server with balanced tier distribution."""
+    server_id = require_explicit_bot_server_id(server_id)
     db = await get_db()
     
     # Check existing bots
@@ -486,8 +495,13 @@ async def initialize_bots(server_id: str = "default", count: int = 20):
 
 if __name__ == "__main__":
     async def main():
-        await initialize_bots("default", 20)
+        server_id = os.getenv("DIVINE_BOT_SERVER_ID", "").strip()
+        if not server_id:
+            print("Bot script SKIPPED: DIVINE_BOT_SERVER_ID must be explicit and not 'default'")
+            return
+
+        await initialize_bots(server_id, 20)
         print("\nRunning bot cycle...")
-        await run_bot_cycle("default")
+        await run_bot_cycle(server_id)
     
     asyncio.run(main())
