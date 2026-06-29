@@ -1,25 +1,13 @@
-/**
- * v96 — Auth context.
- *
- * Pack: MEGA_RELEASE_ACCELERATION_45_v96.
- *
- * Funzionalità:
- *  - Session restore da expo-secure-store all'avvio.
- *  - login(provider): Google / Apple / Guest (con fallback sandbox se credentials mancanti).
- *  - logout().
- *  - account info (alias-safe, no PII raw).
- *
- * Safety:
- *  - Token in expo-secure-store (NON plain AsyncStorage).
- *  - NO raw OAuth token loggato in console.
- *  - Marker provider_sandbox visibile in UI.
- *  - Fallback dichiarato.
- */
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import {
+  AUTH_ACCOUNT_SECURE_KEY,
+  clearAuthStorage,
+  getAuthTokenCompat,
+  persistCanonicalAuthToken,
+  persistV96AuthAccount,
+} from '../utils/authTokenCompat';
 
-const TOKEN_KEY = 'v96_auth_token';
-const ACCOUNT_KEY = 'v96_auth_account';
 const BACKEND = (process.env.EXPO_BACKEND_URL || '').toString();
 
 export type AuthProvider = 'google' | 'apple' | 'guest';
@@ -66,14 +54,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [providerStatus, setProviderStatus] = useState<any | null>(null);
 
   const persist = useCallback(async (t: string | null, a: AuthAccount | null) => {
-    try {
-      if (t) await SecureStore.setItemAsync(TOKEN_KEY, t);
-      else await SecureStore.deleteItemAsync(TOKEN_KEY);
-      if (a) await SecureStore.setItemAsync(ACCOUNT_KEY, JSON.stringify(a));
-      else await SecureStore.deleteItemAsync(ACCOUNT_KEY);
-    } catch (e) {
-      // SecureStore può non essere supportato su web → degrade silently
-    }
+    await persistCanonicalAuthToken(t);
+    await persistV96AuthAccount(a);
   }, []);
 
   const refreshMe = useCallback(async () => {
@@ -83,8 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!r.ok) {
-        // token invalido/scaduto → logout silenzioso
-        await persist(null, null);
+        await clearAuthStorage();
         setToken(null);
         setAccount(null);
         return;
@@ -95,26 +76,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await persist(token, d.account);
       }
     } catch (e: any) {
-      // network error: mantieni stato locale
+      // Network errors keep the local auth state until an explicit logout.
     }
   }, [token, persist]);
 
-  // Session restore + provider status
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const [storedToken, storedAccount] = await Promise.all([
-          SecureStore.getItemAsync(TOKEN_KEY).catch(() => null),
-          SecureStore.getItemAsync(ACCOUNT_KEY).catch(() => null),
+        const [storedAuth, storedAccount] = await Promise.all([
+          getAuthTokenCompat(),
+          SecureStore.getItemAsync(AUTH_ACCOUNT_SECURE_KEY).catch(() => null),
         ]);
-        if (!cancelled && storedToken) {
-          setToken(storedToken);
+        if (!cancelled && storedAuth.conflict) {
+          setError('auth_token_conflict');
+        }
+        if (!cancelled && storedAuth.token) {
+          setToken(storedAuth.token);
           if (storedAccount) {
             try { setAccount(JSON.parse(storedAccount)); } catch {}
           }
         }
-        // Provider status (non auth-required)
         const r = await fetch(`${BACKEND}/api/auth/provider-status`);
         if (r.ok && !cancelled) {
           const d = await r.json();
@@ -127,7 +109,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => { cancelled = true; };
   }, []);
 
-  // Quando il token cambia, esegui refreshMe per validare
   useEffect(() => {
     if (token && !account) {
       refreshMe();
@@ -158,7 +139,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error(`login_${provider}_failed_${r.status}_${txt.slice(0, 80)}`);
       }
       const d = await r.json();
-      // NESSUN log del token (no raw OAuth)
       const newToken = d.token as string;
       const newAccount = d.account as AuthAccount;
       setToken(newToken);
@@ -183,9 +163,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setToken(null);
       setAccount(null);
-      await persist(null, null);
+      await clearAuthStorage();
     }
-  }, [token, persist]);
+  }, [token]);
 
   const value: AuthState = {
     loading,

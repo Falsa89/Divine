@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiCall } from '../utils/api';
+import {
+  clearAuthStorage,
+  getAuthTokenCompat,
+  persistCanonicalAuthToken,
+} from '../src/utils/authTokenCompat';
 
 interface User {
   id: string;
@@ -61,14 +65,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loadStoredAuth = async () => {
     try {
-      const storedToken = await AsyncStorage.getItem('token');
-      if (storedToken) {
-        setToken(storedToken);
+      const storedAuth = await getAuthTokenCompat();
+      if (storedAuth.token) {
+        setToken(storedAuth.token);
         const profile = await apiCall('/api/user/profile');
         setUser(profile);
       }
     } catch (e) {
-      await AsyncStorage.removeItem('token');
+      await clearAuthStorage();
     } finally {
       setLoading(false);
     }
@@ -79,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
-    await AsyncStorage.setItem('token', data.token);
+    await persistCanonicalAuthToken(data.token);
     setToken(data.token);
     setUser(data.user);
   };
@@ -89,15 +93,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       method: 'POST',
       body: JSON.stringify({ email, password, username }),
     });
-    await AsyncStorage.setItem('token', data.token);
+    await persistCanonicalAuthToken(data.token);
     setToken(data.token);
     setUser(data.user);
   };
 
   const logout = async () => {
-    await AsyncStorage.removeItem('token');
+    await clearAuthStorage();
     // v101 — clear selezione server cosi al prossimo login si passa da /servers
-    try { await AsyncStorage.removeItem('v101_selected_server_id'); } catch (_e) {}
     setToken(null);
     setUser(null);
   };
