@@ -27,6 +27,7 @@ Provider credentials policy:
 """
 import hashlib
 import os
+import time
 import uuid
 from datetime import datetime, timedelta
 from typing import Optional
@@ -66,12 +67,15 @@ def _hash_provider_subject(provider: str, subject: str) -> str:
 
 
 def _create_token(user_id: str, account_id: str, provider: str) -> str:
+    now = datetime.utcnow()
+    issued_at = time.time()
     payload = {
         "user_id": user_id,
         "account_id": account_id,
         "provider": provider,
-        "iat": datetime.utcnow(),
-        "exp": datetime.utcnow() + timedelta(days=JWT_EXP_DAYS),
+        "iat": int(issued_at),
+        "auth_iat": issued_at,
+        "exp": now + timedelta(days=JWT_EXP_DAYS),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGO)
 
@@ -279,8 +283,8 @@ def create_auth_router(db, get_current_user):
     # ──────────────────────────────────────────────────────────────────
     @router.post("/logout")
     async def auth_logout(current_user: dict = Depends(get_current_user)):
-        # Stateless JWT: il client deve scartare il token. Aggiorniamo last_login per audit.
-        await db.users.update_one({"id": current_user["id"]}, {"$set": {"last_logout": datetime.utcnow()}})
+        now = datetime.utcnow()
+        await db.users.update_one({"id": current_user["id"]}, {"$set": {"last_logout": now}})
         return {"v96_auth": True, "logged_out": True}
 
     # ──────────────────────────────────────────────────────────────────
@@ -338,11 +342,12 @@ def create_auth_router(db, get_current_user):
     # ──────────────────────────────────────────────────────────────────
     @router.post("/logout-all")
     async def auth_logout_all(current_user: dict = Depends(get_current_user)):
+        now = datetime.utcnow()
         result = await db.refresh_tokens.update_many(
             {"user_id": current_user["id"], "revoked_at": None},
-            {"$set": {"revoked_at": datetime.utcnow(), "revoke_reason": "logout_all"}},
+            {"$set": {"revoked_at": now, "revoke_reason": "logout_all"}},
         )
-        await db.users.update_one({"id": current_user["id"]}, {"$set": {"last_logout_all": datetime.utcnow()}})
+        await db.users.update_one({"id": current_user["id"]}, {"$set": {"last_logout_all": now}})
         return {"v97_auth": True, "logged_out_all": True, "refresh_tokens_revoked": result.modified_count}
 
     # ──────────────────────────────────────────────────────────────────

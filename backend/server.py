@@ -6,6 +6,7 @@ import os
 import uuid
 import random
 import asyncio
+import time
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -104,11 +105,50 @@ def serialize_doc(doc):
 
 # ===================== AUTH =====================
 def create_token(user_id: str) -> str:
+    now = datetime.utcnow()
+    issued_at = time.time()
     payload = {
         "user_id": user_id,
-        "exp": datetime.utcnow() + timedelta(days=30),
+        "iat": int(issued_at),
+        "auth_iat": issued_at,
+        "exp": now + timedelta(days=30),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+
+def _coerce_utc_datetime(value) -> Optional[datetime]:
+    if value is None:
+        return None
+    if isinstance(value, datetime):
+        return value.replace(tzinfo=None)
+    if isinstance(value, (int, float)):
+        try:
+            return datetime.utcfromtimestamp(float(value))
+        except (TypeError, ValueError, OSError):
+            return None
+    if isinstance(value, str):
+        try:
+            raw = value.strip()
+            if raw.endswith("Z"):
+                raw = raw[:-1] + "+00:00"
+            parsed = datetime.fromisoformat(raw)
+            return parsed.replace(tzinfo=None)
+        except ValueError:
+            return None
+    return None
+
+def _token_issued_at(payload: dict) -> datetime:
+    issued_at = _coerce_utc_datetime(payload.get("auth_iat", payload.get("iat")))
+    if not issued_at:
+        raise HTTPException(status_code=401, detail="Token privo di iat")
+    return issued_at
+
+def _latest_logout_cutoff(user: dict) -> Optional[datetime]:
+    cutoffs = [
+        _coerce_utc_datetime(user.get("last_logout")),
+        _coerce_utc_datetime(user.get("last_logout_all")),
+    ]
+    valid = [cutoff for cutoff in cutoffs if cutoff is not None]
+    return max(valid) if valid else None
 
 async def get_current_user(authorization: Optional[str] = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):
@@ -116,9 +156,13 @@ async def get_current_user(authorization: Optional[str] = Header(None)):
     token = authorization.split(" ")[1]
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        issued_at = _token_issued_at(payload)
         user = await db.users.find_one({"id": payload["user_id"]})
         if not user:
             raise HTTPException(status_code=401, detail="Utente non trovato")
+        logout_cutoff = _latest_logout_cutoff(user)
+        if logout_cutoff and issued_at < logout_cutoff:
+            raise HTTPException(status_code=401, detail="Token revocato")
         return serialize_doc(user)
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token scaduto")
