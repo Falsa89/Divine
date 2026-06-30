@@ -1,5 +1,5 @@
 """Pack 131 — Combat Preview route (GET, read-only).
-GET /api/combat/preview?mode=training&server_id=s1
+GET /api/combat/preview?mode=training&server_id=qa-eu-01
 """
 from __future__ import annotations
 import os
@@ -10,6 +10,7 @@ from fastapi import APIRouter, Header, HTTPException, Query
 router = APIRouter(prefix="/api/combat", tags=["combat_preview_v131"])
 from helpers.jwt_secret_preflight import resolve_jwt_secret  # SECURITY_HOTFIX_A
 _JWT_SECRET = resolve_jwt_secret()
+from helpers.server_id_contract import validate_psp_server_id
 
 
 async def _resolve_user(authorization: Optional[str]):
@@ -53,6 +54,19 @@ async def combat_preview(
     """
     current_user = await _resolve_user(authorization)
     user_id = current_user.get('id')
+    validation = await validate_psp_server_id(server_id)
+    if not validation.ok:
+        raise HTTPException(
+            status_code=validation.http_status,
+            detail={
+                'blocker': validation.blocker,
+                'server_id': validation.server_id,
+                'allowlist_source': validation.allowlist_source,
+                'reason': validation.reason,
+                'route': '/api/combat/preview',
+            },
+        )
+    server_id = validation.server_id
     from server import db as _db
     from helpers.lobby_launch_context import build_lobby_launch_context
     from helpers.combat_preview_adapter import build_combat_preview_input, build_post_battle_preview

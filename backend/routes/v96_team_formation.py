@@ -55,6 +55,7 @@ from helpers.team_formation_contract import (
     TEAM_FORMATION_DUPLICATE_CELL,
     TEAM_FORMATION_TOO_MANY_MEMBERS,
 )
+from helpers.server_id_contract import validate_psp_server_id
 
 router = APIRouter(prefix="/api/team", tags=["v96_team_formation"])
 
@@ -124,6 +125,28 @@ def create_team_formation_router(db, get_current_user):
         # Pack 88 — STRICT SERVER-SCOPED PATH (server_id present)
         # =====================================================================
         if server_id:
+            validation = await validate_psp_server_id(server_id)
+            if not validation.ok:
+                return {
+                    **base_response,
+                    "server_id": validation.server_id or server_id,
+                    "authenticated": True,
+                    "account_id": account_id,
+                    "filter_applied": False,
+                    "psp_present_for_server": False,
+                    "profile_id": None,
+                    "team_source": "none",
+                    "legacy_account_team_used": False,
+                    "source": "blocked_server_id_rejected",
+                    "fallback_used": False,
+                    "team_formation": [],
+                    "blocker": validation.blocker,
+                    "server_id_validation": "failed",
+                    "server_id_allowlist_source": validation.allowlist_source,
+                    "reason": validation.reason,
+                }
+            server_id = validation.server_id
+            base_response["server_id"] = server_id
             # Pack 82 dual-read compat + Pack 84 normalized PSP user_id (UUID):
             # lookup primary via UUID, fallback per PSP storici con _id-stringified.
             psp_doc = await db.player_server_profiles.find_one(
@@ -322,7 +345,18 @@ def create_team_formation_router(db, get_current_user):
                         "message": "Questo account non e' nell'allowlist QA team save.",
                     },
                 )
-        server_id = body.server_id
+        validation = await validate_psp_server_id(body.server_id)
+        if not validation.ok:
+            raise HTTPException(
+                status_code=validation.http_status,
+                detail={
+                    "blocker": validation.blocker,
+                    "server_id": validation.server_id,
+                    "allowlist_source": validation.allowlist_source,
+                    "reason": validation.reason,
+                },
+            )
+        server_id = validation.server_id
         # HOTFIX E — Cap dim dal contratto centralizzato (Pack 125 cap = 6).
         if len(body.team_formation) > TEAM_FORMATION_V1_MAX_MEMBERS:
             raise HTTPException(

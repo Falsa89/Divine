@@ -13,6 +13,7 @@ from .game_data import STORY_CHAPTERS, EQUIPMENT_SLOTS, EQUIPMENT_TEMPLATES, DAI
 # PUBLIC_SYNC_TAG_v108_POSTQA_D_AUTHORITATIVE_PRE_GATES_AND_MUTATION_LOCKS
 from utils.postqa_d_mutation_gate import make_legacy_mutation_gate_dep
 from fastapi import Depends as _Depends_postqa_d
+from helpers.server_id_contract import validate_psp_server_id
 
 
 # Pack 101 — Tower legacy quarantine kill switch (default OFF).
@@ -62,7 +63,21 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
         """
         uid = current_user["id"]
         if server_id and isinstance(server_id, str) and server_id.strip():
-            sid = server_id.strip()
+            validation = await validate_psp_server_id(server_id)
+            if not validation.ok:
+                return {
+                    "blocker": validation.blocker,
+                    "server_id": validation.server_id,
+                    "filter_applied": False,
+                    "progress_source": "none",
+                    "chapters": [],
+                    "progress": {"current_chapter": 1, "current_stage": 1},
+                    "server_id_validation": "failed",
+                    "server_id_allowlist_source": validation.allowlist_source,
+                    "reason": validation.reason,
+                    "_slc_pack_92_story_loader_server_scope": True,
+                }
+            sid = validation.server_id
             psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
             if not psp:
                 return {

@@ -1,7 +1,7 @@
 """Pack 130 — Lobby Launch Context router (READ-ONLY).
 
 Endpoint:
-  GET /api/lobby/launch-context/preview?mode=training&server_id=s1
+  GET /api/lobby/launch-context/preview?mode=training&server_id=qa-eu-01
 
 Properties:
   - auth-required (Bearer JWT, stesso schema usato da server.py)
@@ -24,6 +24,7 @@ router = APIRouter(prefix="/api/lobby", tags=["lobby_launch_v130"])
 
 from helpers.jwt_secret_preflight import resolve_jwt_secret  # SECURITY_HOTFIX_A
 _JWT_SECRET = resolve_jwt_secret()
+from helpers.server_id_contract import validate_psp_server_id
 
 
 async def _resolve_user(authorization: Optional[str]) -> Optional[dict]:
@@ -69,6 +70,19 @@ async def lobby_launch_context_preview(
     """
     current_user = await _resolve_user(authorization)
     user_id = current_user.get('id') if current_user else None
+    validation = await validate_psp_server_id(server_id)
+    if not validation.ok:
+        raise HTTPException(
+            status_code=validation.http_status,
+            detail={
+                'blocker': validation.blocker,
+                'server_id': validation.server_id,
+                'allowlist_source': validation.allowlist_source,
+                'reason': validation.reason,
+                'route': '/api/lobby/launch-context/preview',
+            },
+        )
+    server_id = validation.server_id
     # Lazy import per evitare cicli al boot.
     from server import db as _db
     from helpers.lobby_launch_context import build_lobby_launch_context
