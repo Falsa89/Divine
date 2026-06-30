@@ -6,11 +6,9 @@ Obiettivo:
   fase pre-QA. Risposta strutturata `PRE_QA_MUTATION_BLOCKED` con HTTP 423.
 
 Proprietà (onestà):
-  - Default fail-OPEN (DORMANT) se env `PRE_QA_MUTATION_GUARD_ENABLED` != 'true'.
-    Questo è necessario perché:
-      a) Pack 128 non puo' modificare `backend/.env` (vincolo utente).
-      b) Default OFF garantisce zero regressioni su QA flow esistente.
-      c) Quando env diventa 'true' in supervisor QA, l'enforcement è REALE.
+  - Default fail-CLOSED: se env `PRE_QA_MUTATION_GUARD_ENABLED` manca o ha
+    valore non riconosciuto, il guard resta attivo.
+  - Solo valori esplicitamente false/off/0/no disabilitano il guard.
   - Quando attivo, applica deny-by-default: solo route nella allowlist passano.
   - Allowlist letta da `data/design/system_safety/pack_128_backend_mutation_allowlist.json`
     (fallback statico in caso file mancante per evitare crash di boot).
@@ -54,19 +52,19 @@ _STATIC_FALLBACK_ALLOWLIST: Tuple[Tuple[str, str], ...] = (
     ('POST', '/api/psp/starter/claim'),
     ('POST', '/api/team/save-formation'),
     ('POST', '/api/battle/launch'),
-    ('POST', '/api/logout'),
-    ('POST', '/api/logout-all'),
+    ('POST', '/api/auth/logout'),
+    ('POST', '/api/auth/logout-all'),
 )
 
 _MUTATING_METHODS: Set[str] = {'POST', 'PUT', 'PATCH', 'DELETE'}
 
-# Variabile env che attiva l'enforcement runtime. Default OFF per non rompere
-# il QA flow esistente (l'attivazione e' un'azione esplicita di supervisor QA).
+# Variabile env per override runtime. Default ON/fail-closed in pre-QA; solo
+# valori esplicitamente falsi disabilitano l'enforcement.
 ENV_FLAG = 'PRE_QA_MUTATION_GUARD_ENABLED'
 
 
-def _truthy(val: str | None) -> bool:
-    return (val or '').strip().lower() in ('true', '1', 'yes', 'on')
+def _explicitly_disabled(val: str | None) -> bool:
+    return (val or '').strip().lower() in ('false', '0', 'no', 'off', 'disabled')
 
 
 def load_allowlist() -> Set[Tuple[str, str]]:
@@ -117,13 +115,13 @@ def is_allowed(method: str, path: str, allowlist: Iterable[Tuple[str, str]] | No
 
 
 class PreQaMutationGuardMiddleware(BaseHTTPMiddleware):
-    """Middleware fail-closed (env-gated) per mutazioni non allowlisted in pre-QA.
+    """Middleware fail-closed per mutazioni non allowlisted in pre-QA.
 
     Comportamento:
-      - env `PRE_QA_MUTATION_GUARD_ENABLED` != 'true' → middleware è DORMANT,
-        request passa inalterata (no behavioural change runtime).
-      - env == 'true' → enforce allowlist: METODI mutativi non-allowlisted →
-        HTTP 423 (Locked) con payload strutturato `PRE_QA_MUTATION_BLOCKED`.
+      - env mancante/non riconosciuto → enforce allowlist.
+      - env esplicitamente false/off/0/no → middleware DORMANT.
+      - quando attivo: METODI mutativi non-allowlisted → HTTP 423 (Locked)
+        con payload strutturato `PRE_QA_MUTATION_BLOCKED`.
       - OPTIONS/GET/HEAD sempre pass.
     """
 
@@ -133,7 +131,7 @@ class PreQaMutationGuardMiddleware(BaseHTTPMiddleware):
 
     @property
     def enabled(self) -> bool:
-        return _truthy(os.environ.get(ENV_FLAG))
+        return not _explicitly_disabled(os.environ.get(ENV_FLAG))
 
     def _allowlist(self) -> Set[Tuple[str, str]]:
         if self._explicit_allowlist is not None:
@@ -141,7 +139,7 @@ class PreQaMutationGuardMiddleware(BaseHTTPMiddleware):
         return load_allowlist()
 
     async def dispatch(self, request: Request, call_next):
-        # 1) Se middleware non attivo via env → pass (default safe, no regressioni).
+        # 1) Se middleware esplicitamente disabilitato via env → pass.
         if not self.enabled:
             return await call_next(request)
 
