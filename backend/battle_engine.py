@@ -1145,23 +1145,25 @@ def create_battle_routes(db, get_current_user, serialize_doc, calculate_hero_pow
     async def simulate_battle_endpoint(request: Request, current_user: dict = Depends(get_current_user)):
         """Simulate a battle with the user's active team.
 
-        SECURITY_HOTFIX_A — Fail-closed guard PRIMA di qualsiasi DB read/write.
+        FIX_PACK_4B — Fail-closed guard PRIMA di qualsiasi DB read/write.
         L'endpoint legacy resta DISABLED in pre-QA: concedeva gold/EXP/inventory drops
-        in modo non server-scoped, non idempotente, senza ledger. Riabilitabile solo
-        via env esplicito BATTLE_SIMULATE_LIVE_ENABLED=true, e SOLO transitoriamente
-        finche' non esiste un runtime authoritative server-scoped.
+        in modo non server-scoped, non idempotente, senza ledger.
+        BATTLE_SIMULATE_LIVE_ENABLED non riapre reward/EXP/inventory live.
 
         v108_POSTQA_A preview guard: kept as defense in depth dopo il primo gate.
         """
-        # SECURITY_HOTFIX_A — fail-closed PRIMA di tutto (no body parse, no DB).
-        if os.getenv('BATTLE_SIMULATE_LIVE_ENABLED', '').strip().lower() not in ('true', '1', 'yes', 'on'):
-            raise HTTPException(status_code=423, detail={
-                'code': 'BATTLE_SIMULATE_LIVE_DISABLED_PRE_QA',
-                'message': 'Legacy live battle simulate is disabled before authoritative server-scoped battle runtime.',
-                'status': 'blocked',
-                'device_qa_status': 'blocked',
-                'hotfix': 'SECURITY_HOTFIX_A',
-            })
+        # FIX_PACK_4B — fail-closed PRIMA di tutto (no body parse, no DB).
+        raise HTTPException(status_code=423, detail={
+            'code': 'BATTLE_SIMULATE_PRE_QA_MUTATION_LOCKED',
+            'message': 'Legacy /api/battle/simulate is locked in pre-QA and cannot grant reward, EXP, hero EXP, or inventory drops.',
+            'status': 'blocked',
+            'device_qa_status': 'blocked',
+            'ignored_escape_flag': 'BATTLE_SIMULATE_LIVE_ENABLED',
+            'no_users_gold_experience_mutation': True,
+            'no_hero_exp_mutation': True,
+            'no_inventory_mutation': True,
+            'pack_origin': 'FIX_PACK_4B_STORY_BATTLE_SIMULATE_LOCK',
+        })
         # v108_POSTQA_A — Preview guard (defense in depth).
         try:
             body = await request.json()

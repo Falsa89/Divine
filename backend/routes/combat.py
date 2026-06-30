@@ -127,6 +127,20 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
 
     @router.post("/story/battle")
     async def story_battle(req: StoryBattleRequest, server_id: str = None, idempotency_token: str = None, current_user: dict = Depends(get_current_user)):
+        raise HTTPException(423, detail={
+            "blocker": "STORY_BATTLE_PRE_QA_MUTATION_LOCKED",
+            "route": "POST /api/story/battle",
+            "reason": (
+                "Story battle live resolution is locked in pre-QA because legacy and "
+                "strict paths can write progress or reward ledger state. Use the "
+                "preview-safe lobby/combat flow until authoritative story battle lands."
+            ),
+            "no_story_progress_write": True,
+            "no_reward_claim_ledger_write": True,
+            "no_users_gold_gems_experience_mutation": True,
+            "no_inventory_or_equipment_mutation": True,
+            "pack_origin": "FIX_PACK_4B_STORY_BATTLE_SIMULATE_LOCK",
+        })
         uid = current_user["id"]
         # Pre-QA Stabilization 112 — Legacy story battle senza server_id quarantineato.
         # Strict server_id path resta disponibile (test-only via idempotency_token).
