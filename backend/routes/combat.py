@@ -24,25 +24,23 @@ _TOWER_LEGACY_KILL_SWITCH_ENV = "TOWER_LEGACY_LIVE_ENABLED"
 
 
 def _pack_101_tower_legacy_on() -> bool:
-    v = os.getenv(_TOWER_LEGACY_KILL_SWITCH_ENV)
-    return str(v or "false").strip().lower() in ("true", "1", "yes", "on")
+    return False
 
 
 def _pack_101_tower_legacy_block_or_raise():
-    """Solleva 503 se la quarantena legacy e\u0300 attiva (default)."""
-    if not _pack_101_tower_legacy_on():
-        raise HTTPException(503, detail={
-            "blocker": "TOWER_LEGACY_QUARANTINED",
-            "kill_switch_env": _TOWER_LEGACY_KILL_SWITCH_ENV,
-            "reason": (
-                "Pack 101 ha quarantinato il path tower legacy. Il path muta "
-                "users.gold/users.gems/users.experience e scrive db.tower_progress "
-                "account-wide. Usare /api/tower/strict/* (server-scoped, no reward live)."
-            ),
-            "tower_strict_endpoint_group": "/api/tower/strict",
-            "tower_reward_live_grant": False,
-            "reward_live_general": False,
-        })
+    """Solleva 423: i path tower legacy non sono riapribili via env in pre-QA."""
+    raise HTTPException(423, detail={
+        "blocker": "TOWER_LEGACY_PRE_QA_MUTATION_LOCKED",
+        "ignored_escape_flag": _TOWER_LEGACY_KILL_SWITCH_ENV,
+        "reason": (
+            "Pack 4C mantiene chiuso il path tower legacy. Il path muta "
+            "users.gold/users.gems/users.experience e scrive db.tower_progress "
+            "account-wide. Usare solo flow preview-safe finche` non arriva un "
+            "runtime tower server-scoped."
+        ),
+        "tower_reward_live_grant": False,
+        "reward_live_general": False,
+    })
 
 
 def register_combat_routes(router, db, get_current_user, serialize_doc, calculate_hero_power):
@@ -99,11 +97,13 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
                 "_slc_pack_92_story_loader_server_scope": True,
             }
 
-        # Legacy non-player-facing path (no server_id)
+        # Legacy non-player-facing path (no server_id). Pack 4C: read-only fallback,
+        # no insert-on-read.
         progress = await db.story_progress.find_one({"user_id": current_user["id"]})
+        progress_missing = False
         if not progress:
+            progress_missing = True
             progress = {"user_id": current_user["id"], "completed": {}, "current_chapter": 1, "current_stage": 1}
-            await db.story_progress.insert_one(progress)
         chapters = []
         for ch in STORY_CHAPTERS:
             completed_stages = progress.get("completed", {}).get(str(ch["id"]), 0)
@@ -118,6 +118,8 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
             "progress": {"current_chapter": progress.get("current_chapter", 1), "current_stage": progress.get("current_stage", 1)},
             "filter_applied": False,
             "progress_source": "legacy_account_wide_deprecated",
+            "progress_missing": progress_missing,
+            "no_mutation_on_read": True,
             "_slc_pack_92_story_legacy_path_warning": "Non-player-facing path. Player-facing reads MUST include server_id.",
         }
 
@@ -328,19 +330,31 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
     @router.get("/pvp/status")
     async def get_pvp_status(current_user: dict = Depends(get_current_user)):
         pvp = await db.pvp_data.find_one({"user_id": current_user["id"]})
+        pvp_missing = False
         if not pvp:
+            pvp_missing = True
             pvp = {"user_id": current_user["id"], "rank": 0, "trophies": 0, "wins": 0, "losses": 0, "streak": 0, "daily_battles": 0, "last_battle_date": None}
-            await db.pvp_data.insert_one(pvp)
         top10 = await db.pvp_data.find({}).sort("trophies", -1).limit(10).to_list(10)
         leaderboard = []
         for i, entry in enumerate(top10):
             user = await db.users.find_one({"id": entry["user_id"]})
             if user:
                 leaderboard.append({"rank": i + 1, "username": user.get("username", "???"), "trophies": entry.get("trophies", 0), "wins": entry.get("wins", 0)})
-        return {**serialize_doc(pvp), "leaderboard": leaderboard}
+        return {
+            **serialize_doc(pvp),
+            "leaderboard": leaderboard,
+            "pvp_data_missing": pvp_missing,
+            "no_mutation_on_read": True,
+        }
 
     @router.post("/pvp/battle")
     async def pvp_battle(current_user: dict = Depends(get_current_user)):
+        raise HTTPException(423, detail={
+            "blocker": "PVP_BATTLE_PRE_QA_MUTATION_LOCKED",
+            "ignored_escape_flag": "PVP_BATTLE_LEGACY_ENABLED",
+            "no_users_gold_gems_experience_mutation": True,
+            "no_pvp_data_account_wide_write": True,
+        })
         # Pre-QA Stabilization 112 — PvP battle legacy account-wide quarantine.
         import os as _os
         if str(_os.environ.get("PVP_BATTLE_LEGACY_ENABLED", "false")).strip().lower() not in ("true", "1", "yes", "on"):
@@ -396,6 +410,13 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
 
     @router.post("/events/battle")
     async def event_battle(req: EventBattleRequest, current_user: dict = Depends(get_current_user)):
+        raise HTTPException(423, detail={
+            "blocker": "EVENTS_BATTLE_PRE_QA_MUTATION_LOCKED",
+            "ignored_escape_flag": "EVENTS_BATTLE_LEGACY_ENABLED",
+            "no_users_gold_gems_experience_mutation": True,
+            "no_event_completions_account_wide_write": True,
+            "no_inventory_or_equipment_mutation": True,
+        })
         # Pre-QA Stabilization 112 — Events battle legacy account-wide quarantine.
         import os as _os
         if str(_os.environ.get("EVENTS_BATTLE_LEGACY_ENABLED", "false")).strip().lower() not in ("true", "1", "yes", "on"):
@@ -457,6 +478,12 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
         ],
     )
     async def level_up_hero(req: LevelUpRequest, current_user: dict = Depends(get_current_user)):
+        raise HTTPException(423, detail={
+            "blocker": "HERO_LEVELUP_LEGACY_PRE_QA_MUTATION_LOCKED",
+            "ignored_escape_flag": "DIVINE_ALLOW_LEGACY_HERO_PROGRESS_MUTATIONS",
+            "no_user_gold_mutation": True,
+            "no_user_hero_progress_mutation": True,
+        })
         uid = current_user["id"]
         uh = await db.user_heroes.find_one({"id": req.user_hero_id, "user_id": uid})
         if not uh:

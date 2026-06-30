@@ -51,6 +51,12 @@ def register_raids_routes(router, db, get_current_user, serialize_doc, calculate
         ],
     )
     async def create_raid(req: CreateRaidRequest, current_user: dict = Depends(get_current_user)):
+        raise HTTPException(423, detail={
+            "blocker": "RAID_CREATE_LEGACY_PRE_QA_MUTATION_LOCKED",
+            "ignored_escape_flag": "DIVINE_ALLOW_LEGACY_RAID_MUTATIONS",
+            "no_active_raids_mutation": True,
+            "no_raid_reward_or_economy_mutation": True,
+        })
         boss = next((b for b in RAID_BOSSES if b["id"] == req.boss_id), None)
         if not boss:
             raise HTTPException(404, "Boss non trovato")
@@ -83,6 +89,13 @@ def register_raids_routes(router, db, get_current_user, serialize_doc, calculate
         ],
     )
     async def attack_raid_boss(boss_id: str, current_user: dict = Depends(get_current_user)):
+        raise HTTPException(423, detail={
+            "blocker": "RAID_ATTACK_LEGACY_PRE_QA_MUTATION_LOCKED",
+            "ignored_escape_flag": "DIVINE_ALLOW_LEGACY_RAID_MUTATIONS",
+            "no_active_raids_mutation": True,
+            "no_users_gold_gems_experience_mutation": True,
+            "no_raid_attempts_mutation": True,
+        })
         uid = current_user["id"]
         boss = next((b for b in RAID_BOSSES if b["id"] == boss_id), None)
         if not boss:
@@ -162,6 +175,12 @@ def register_raids_routes(router, db, get_current_user, serialize_doc, calculate
         ],
     )
     async def craft_exclusive_item(req: CraftExclusiveRequest, current_user: dict = Depends(get_current_user)):
+        raise HTTPException(423, detail={
+            "blocker": "EXCLUSIVE_CRAFT_LEGACY_PRE_QA_MUTATION_LOCKED",
+            "ignored_escape_flag": "DIVINE_ALLOW_LEGACY_RAID_MUTATIONS",
+            "no_users_gold_gems_mutation": True,
+            "no_user_equipment_mutation": True,
+        })
         uid = current_user["id"]
         ei = next((e for e in EXCLUSIVE_ITEMS if e["hero_name"] == req.hero_name), None)
         if not ei:
