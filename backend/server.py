@@ -35,6 +35,7 @@ from utils.hero_visibility import (
     should_show_in_collection,
     should_show_in_battle_picker,  # noqa: F401  (reserved for future battle picker endpoint)
 )
+from helpers.server_id_contract import validate_psp_server_id
 
 # ===================== CONFIG =====================
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
@@ -315,7 +316,7 @@ async def get_hero(hero_id: str):
 @app.post("/api/psp/ensure")
 async def psp_ensure_fresh_start(
     response: Response,
-    server_id: str,
+    server_id: Optional[str] = None,
     current_user: dict = Depends(get_current_user),
 ):
     """
@@ -334,11 +335,23 @@ async def psp_ensure_fresh_start(
       onboarding_state = "pending"
       created_by_pack = "v110_pack_85_psp_onboarding_new_server_fresh_start"
     """
-    if not server_id or not isinstance(server_id, str) or not server_id.strip():
-        response.status_code = 400
-        return {"v110_psp_ensure": False, "blocker": "SERVER_ID_REQUIRED"}
+    validation = await validate_psp_server_id(server_id)
+    if not validation.ok:
+        response.status_code = validation.http_status
+        response.headers["X-Server-Id-Validation"] = "failed"
+        response.headers["X-Blocker"] = validation.blocker
+        response.headers["X-Server-Id-Allowlist-Source"] = validation.allowlist_source
+        if validation.server_id:
+            response.headers["X-Server-Id"] = validation.server_id
+        return {
+            "v110_psp_ensure": False,
+            "blocker": validation.blocker,
+            "server_id": validation.server_id,
+            "allowlist_source": validation.allowlist_source,
+            "reason": validation.reason,
+        }
     uid = current_user["id"]
-    sid = server_id.strip()
+    sid = validation.server_id
     existing = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
     if existing:
         response.headers["X-PSP-Ensure-Mode"] = "already_exists_no_write"
@@ -410,7 +423,7 @@ async def psp_ensure_fresh_start(
 @app.post("/api/psp/starter/claim")
 async def psp_starter_claim(
     response: Response,
-    server_id: str,
+    server_id: Optional[str] = None,
     current_user: dict = Depends(get_current_user),
 ):
     """
@@ -429,11 +442,23 @@ async def psp_starter_claim(
 
     Authorization string Pack 87: AUTORIZZO_V110_SERVER_SCOPED_STARTER_FLOW_PACK_87
     """
-    if not server_id or not isinstance(server_id, str) or not server_id.strip():
-        response.status_code = 400
-        return {"v110_starter_claim": False, "blocker": "SERVER_ID_REQUIRED"}
+    validation = await validate_psp_server_id(server_id)
+    if not validation.ok:
+        response.status_code = validation.http_status
+        response.headers["X-Server-Id-Validation"] = "failed"
+        response.headers["X-Blocker"] = validation.blocker
+        response.headers["X-Server-Id-Allowlist-Source"] = validation.allowlist_source
+        if validation.server_id:
+            response.headers["X-Server-Id"] = validation.server_id
+        return {
+            "v110_starter_claim": False,
+            "blocker": validation.blocker,
+            "server_id": validation.server_id,
+            "allowlist_source": validation.allowlist_source,
+            "reason": validation.reason,
+        }
     uid = current_user["id"]
-    sid = server_id.strip()
+    sid = validation.server_id
     # Verifica PSP esiste (NON crea silently; Pack 85 ensure deve essere stato chiamato).
     psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})
     if not psp:
@@ -616,7 +641,21 @@ async def get_user_heroes(
     uid = current_user["id"]
     canonical_decision = "user_heroes_are_server_scoped"
     if server_id and isinstance(server_id, str) and server_id.strip():
-        sid = server_id.strip()
+        validation = await validate_psp_server_id(server_id)
+        if not validation.ok:
+            response.status_code = validation.http_status
+            response.headers["X-Server-Scope"] = "server_scoped"
+            response.headers["X-Filter-Applied"] = "false"
+            response.headers["X-Blocker"] = validation.blocker
+            response.headers["X-Server-Id"] = validation.server_id or ""
+            response.headers["X-Server-Id-Validation"] = "failed"
+            response.headers["X-Server-Id-Allowlist-Source"] = validation.allowlist_source
+            response.headers["X-Canonical-Decision"] = canonical_decision
+            response.headers["X-Roster-Source"] = "server_scoped_server_id_rejected"
+            response.headers["X-Roster-Count"] = "0"
+            response.headers["X-PSP-Lookup-Mode"] = "skipped_server_id_rejected"
+            return []
+        sid = validation.server_id
         # Pack 82 — DUAL-READ PSP LOOKUP.
         # I PSP migrati da Pack 77 hanno user_id = str(users._id) (ObjectId hex),
         # mentre i PSP futuri canonici useranno users.id (uuid). Per
