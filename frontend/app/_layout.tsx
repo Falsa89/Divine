@@ -1,12 +1,75 @@
-import React, { useEffect } from 'react';
-import { Stack } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Stack, usePathname, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from '../context/AuthContext';
 import { AuthProvider as V96AuthProvider } from '../src/auth/AuthContext';
 import { NotificationProvider } from '../context/NotificationContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { StyleSheet, Platform } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { normalizeRoute } from '../src/utils/preQaNavGuard';
+import { verifySelectedServerScopeReadOnly } from '../src/hooks/useServerScope';
+
+const SERVER_GATE_EXEMPT_ROUTES = new Set<string>([
+  '/',
+  '/index',
+  '/login',
+  '/servers',
+]);
+
+function routeRequiresVerifiedServer(pathname: string | null | undefined): boolean {
+  const normalized = normalizeRoute(pathname || '');
+  if (!normalized || SERVER_GATE_EXEMPT_ROUTES.has(normalized)) return false;
+  if (normalized.startsWith('/_sitemap')) return false;
+  return true;
+}
+
+function GlobalServerGate({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const requiresServer = routeRequiresVerifiedServer(pathname);
+  const [gateState, setGateState] = useState({
+    pathname: '',
+    allowed: false,
+  });
+  const gateReady =
+    !requiresServer ||
+    (gateState.allowed && gateState.pathname === pathname);
+
+  useEffect(() => {
+    let alive = true;
+    async function verify() {
+      if (!requiresServer) {
+        setGateState({ pathname: pathname || '', allowed: true });
+        return;
+      }
+      setGateState({ pathname: pathname || '', allowed: false });
+      const result = await verifySelectedServerScopeReadOnly();
+      if (!alive) return;
+      if (result.ok) {
+        setGateState({ pathname: pathname || '', allowed: true });
+      } else {
+        router.replace('/servers');
+      }
+    }
+    verify().catch(() => {
+      if (alive) router.replace('/servers');
+    });
+    return () => {
+      alive = false;
+    };
+  }, [pathname, requiresServer, router]);
+
+  if (requiresServer && !gateReady) {
+    return (
+      <View style={styles.gateContainer}>
+        <ActivityIndicator color="#FF6B35" />
+      </View>
+    );
+  }
+
+  return <>{children}</>;
+}
 
 export default function RootLayout() {
   useEffect(() => {
@@ -25,6 +88,7 @@ export default function RootLayout() {
       <AuthProvider>
         <V96AuthProvider>
         <NotificationProvider>
+        <GlobalServerGate>
         <StatusBar style="light" hidden />
         <Stack
           screenOptions={{
@@ -98,6 +162,7 @@ export default function RootLayout() {
           {/* v96 — Login screen (Google/Apple/Guest) */}
           <Stack.Screen name="login" options={{ animation: 'fade' }} />
         </Stack>
+        </GlobalServerGate>
         </NotificationProvider>
         </V96AuthProvider>
       </AuthProvider>
@@ -107,4 +172,10 @@ export default function RootLayout() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#080816' },
+  gateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#080816',
+  },
 });

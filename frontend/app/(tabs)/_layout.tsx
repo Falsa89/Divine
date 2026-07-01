@@ -1,11 +1,12 @@
-import React from 'react';
-import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { Tabs, useRouter } from 'expo-router';
+import { ActivityIndicator, View, Text, StyleSheet, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useAnimatedStyle, withTiming, useSharedValue, withSpring,
 } from 'react-native-reanimated';
 import { COLORS } from '../../constants/theme';
+import useServerScope from '../../src/hooks/useServerScope';
 
 function TabIcon({ label, icon, focused }: { label: string; icon: string; focused: boolean }) {
   return (
@@ -28,6 +29,23 @@ function TabIcon({ label, icon, focused }: { label: string; icon: string; focuse
 }
 
 export default function TabsLayout() {
+  const router = useRouter();
+  const serverScope = useServerScope();
+
+  useEffect(() => {
+    if (!serverScope.loading && (!serverScope.isReady || !serverScope.selected_server_id)) {
+      router.replace('/servers');
+    }
+  }, [router, serverScope.loading, serverScope.isReady, serverScope.selected_server_id]);
+
+  if (serverScope.loading || !serverScope.isReady || !serverScope.selected_server_id) {
+    return (
+      <View style={st.gateContainer}>
+        <ActivityIndicator color={COLORS.accent} />
+      </View>
+    );
+  }
+
   return (
     <Tabs
       screenOptions={{
@@ -124,5 +142,11 @@ const st = StyleSheet.create({
     borderRadius: 1,
     backgroundColor: COLORS.accent,
     marginTop: 2,
+  },
+  gateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#080816',
   },
 });
