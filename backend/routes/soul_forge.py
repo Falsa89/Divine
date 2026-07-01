@@ -191,14 +191,15 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
 
         # Legacy non-player-facing path (no server_id)
         wallet = await db.wallets.find_one({"user_id": uid})
+        wallet_missing = wallet is None
         if not wallet:
             wallet = {"user_id": uid, "honor": 0, "guild_points": 0, "prana": 0, "soul_seals": 0, "mission_coins": 0, "dimension_frags": 0, "star_dust": 0}
-            ensure_server_scope(wallet, uid)
-            await db.wallets.insert_one(wallet)
         return {
             "filter_applied": False,
             "wallet_source": "legacy_account_wide_deprecated",
             "_slc_pack_92_wallet_legacy_path_warning": "Non-player-facing path. Player-facing reads MUST include server_id.",
+            "wallet_missing": wallet_missing,
+            "no_mutation_on_read": True,
             "currencies": {
                 "gold": {"amount": user_gold, **CURRENCIES["gold"]},
                 "gems": {"amount": user_gems, **CURRENCIES["gems"]},

@@ -139,10 +139,9 @@ def register_social_routes(router, db, get_current_user, serialize_doc, calculat
     async def get_friends(current_user: dict = Depends(get_current_user)):
         uid = current_user["id"]
         friend_data = await db.friends.find_one({"user_id": uid})
+        friends_doc_missing = friend_data is None
         if not friend_data:
             friend_data = {"user_id": uid, "friends": [], "requests_in": [], "requests_out": []}
-            ensure_server_scope(friend_data, uid)
-            await db.friends.insert_one(friend_data)
         friends = []
         for fid in friend_data.get("friends", []):
             u = await db.users.find_one({"id": fid})
@@ -159,7 +158,14 @@ def register_social_routes(router, db, get_current_user, serialize_doc, calculat
             u = await db.users.find_one({"id": rid})
             if u:
                 requests_in.append({"id": rid, "username": u.get("username", "?"), "level": u.get("level", 1)})
-        return {"friends": friends, "requests_in": requests_in, "requests_out": friend_data.get("requests_out", []), "max_friends": 30}
+        return {
+            "friends": friends,
+            "requests_in": requests_in,
+            "requests_out": friend_data.get("requests_out", []),
+            "max_friends": 30,
+            "friends_doc_missing": friends_doc_missing,
+            "no_mutation_on_read": True,
+        }
 
     class FriendRequest(BaseModel):
         target_username: str
