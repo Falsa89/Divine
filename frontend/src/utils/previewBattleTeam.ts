@@ -199,13 +199,9 @@ export function buildPreviewLocalTeamSnapshot(
 }
 
 /**
- * Costruisce la query URL canonica per `/combat` in modalita' preview.
- * Tutti i campi richiesti dal Battle Launch Contract v1 sono passati
- * come query params separati cosicche' il parser combat.tsx (v107B)
- * possa validare l'envelope con `is_valid=true` e attivare
- * PREVIEW_REWARD_LOCK_ACTIVE (no simulate, no reward, no progress).
- *
- * IMPORTANTE: server_id='preview_local' e' una sentinella non-DB.
+ * Legacy builder neutralizzato da Pack 5D-3C.
+ * Non deve piu' produrre direct `/combat` player-facing: chi lo richiama
+ * viene mandato alla lobby, dove Pack 5D-3B blocca preview_local fail-closed.
  */
 export type BuildPreviewCombatUrlInput = {
   mode: PreviewMode;
@@ -223,21 +219,6 @@ export type BuildPreviewCombatUrlInput = {
 export function buildPreviewCombatUrl(input: BuildPreviewCombatUrlInput): string {
   const serverId = (input.server_id || 'preview_local').toString();
   const enemySourceType = (input.enemy_source_type || 'authored').toString();
-  const launchContext = {
-    server_id: serverId,
-    mode: input.mode,
-    encounter_id: input.encounter_id,
-    player_team_id: null as string | null,
-    player_team_snapshot: [],
-    enemy_source_type: enemySourceType,
-    enemy_source_id: input.enemy_source_id,
-    reward_policy: 'preview',
-    progress_policy: 'preview',
-    battle_engine_mode: 'preview',
-    idempotency_key: null as string | null,
-    client_trace_id: `pack_123_${Date.now()}`,
-  };
-  const battleLaunchId = `pack_123_preview_${Date.now()}`;
   const qp: Record<string, string> = {
     mode: input.mode,
     encounter_id: input.encounter_id,
@@ -248,9 +229,8 @@ export function buildPreviewCombatUrl(input: BuildPreviewCombatUrlInput): string
     progress_policy: 'preview',
     battle_engine_mode: 'preview',
     is_preview: 'true',
-    launch_context: JSON.stringify(launchContext),
-    battle_launch_id: battleLaunchId,
     source_id: input.enemy_source_id,
+    blocked: 'PREVIEW_LOCAL_LOBBY_DISABLED_PRE_QA',
   };
   if (input.floor_id != null) qp.floor_id = String(input.floor_id);
   if (input.opponent_id) qp.opponent_id = input.opponent_id;
@@ -259,7 +239,7 @@ export function buildPreviewCombatUrl(input: BuildPreviewCombatUrlInput): string
   const qs = Object.keys(qp)
     .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(qp[k])}`)
     .join('&');
-  return `/combat?${qs}`;
+  return `/pre-battle-lobby?${qs}`;
 }
 
 /**

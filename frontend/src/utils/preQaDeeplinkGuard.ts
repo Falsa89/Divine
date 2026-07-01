@@ -49,6 +49,7 @@ export interface DeeplinkInterceptResult {
 }
 
 const SAFE_HOME_ROUTE = '/(tabs)/home';
+const PREVIEW_LOCAL_COMBAT_BLOCKER = 'PREVIEW_LOCAL_COMBAT_DEEPLINK_BLOCKED_PRE_QA';
 
 /** Parse minimo di una URL deeplink → path. Tollerante a scheme custom. */
 export function extractPath(url: string): string {
@@ -61,6 +62,22 @@ export function extractPath(url: string): string {
   } catch (_e) {
     return '';
   }
+}
+
+function hasPreviewLocalCombatQuery(url: string, path: string): boolean {
+  const normalized = normalizeRoute(path);
+  if (normalized !== '/combat') return false;
+  let decoded = '';
+  try {
+    decoded = decodeURIComponent(url || '').toLowerCase();
+  } catch (_e) {
+    decoded = String(url || '').toLowerCase();
+  }
+  return (
+    decoded.includes('preview_local')
+    || decoded.includes('server_id=preview')
+    || decoded.includes('is_preview=true')
+  );
 }
 
 /** Decide come trattare un deeplink in pre-QA. */
@@ -83,6 +100,14 @@ export function interceptDeeplink(
       normalizedRoute: normalizeRoute(path),
       errorCode: 'auth_missing',
       safeRedirect: '/login',
+    };
+  }
+  if (hasPreviewLocalCombatQuery(url, path)) {
+    return {
+      decision: 'SHOW_LOCKED',
+      normalizedRoute: normalizeRoute(path),
+      errorCode: 'pre_qa_blocked',
+      errorToken: PREVIEW_LOCAL_COMBAT_BLOCKER,
     };
   }
   const disposition: DeeplinkDisposition = classifyDeeplink(path);

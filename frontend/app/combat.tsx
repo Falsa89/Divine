@@ -5,6 +5,7 @@ import { COLORS, ELEMENTS, RARITY } from '../constants/theme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { apiCall } from '../utils/api';
+import useServerScope from '../src/hooks/useServerScope';
 // v108_pre — Combat Launch Context binding (preview / non-authoritative).
 // Non-destructive: aggiunge SOLO la lettura del payload Battle Launch Contract v1
 // dai router params, marca il run come PREVIEW_NON_AUTHORITATIVE e logga in dev.
@@ -83,6 +84,32 @@ const RARITY_COLORS: Record<number, string> = RARITY.colors;
 
 type Phase = 'loading' | 'preparing' | 'fighting' | 'result';
 
+const PREVIEW_LOCAL_SERVER_ID = 'preview_local';
+
+function singleParamValue(value: unknown): string | null {
+  const raw = Array.isArray(value) ? value[0] : value;
+  if (raw == null) return null;
+  const text = String(raw).trim();
+  return text.length > 0 ? text : null;
+}
+
+function parseLaunchContextParam(value: unknown): any | null {
+  const raw = Array.isArray(value) ? value[0] : value;
+  if (!raw) return null;
+  if (typeof raw === 'object') return raw;
+  if (typeof raw !== 'string') return null;
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : null;
+  } catch (_e) {
+    return null;
+  }
+}
+
+function isPreviewLocalServerId(value: string | null | undefined): boolean {
+  return (value || '').trim().toLowerCase() === PREVIEW_LOCAL_SERVER_ID;
+}
+
 // Track sprite states per character
 interface SpriteData {
   state: 'idle' | 'attack' | 'hit' | 'skill' | 'ultimate' | 'dead' | 'heal' | 'dodge';
@@ -102,17 +129,49 @@ interface SpriteData {
 
 export default function CombatScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ campaignFaction?: string; campaign_faction?: string; launch_context?: string; battle_launch?: string; battle_launch_id?: string; mode?: string; is_preview?: string; reward_policy?: string; progress_policy?: string; battle_engine_mode?: string }>();
+  const params = useLocalSearchParams<{ campaignFaction?: string; campaign_faction?: string; launch_context?: string; battle_launch?: string; battle_launch_id?: string; mode?: string; encounter_id?: string; source_id?: string; enemy_source_type?: string; enemy_source_id?: string; server_id?: string; is_preview?: string; reward_policy?: string; progress_policy?: string; battle_engine_mode?: string }>();
+  const serverScope = useServerScope();
   // v108_pre — leggi (senza mutare) il Battle Launch Contract v1 dai router params.
   // Etichetta sempre il run come PREVIEW_NON_AUTHORITATIVE. Se assente, legacy.
   const v108LaunchEnvelope = React.useMemo(() => readLaunchContextFromRouterParams(params as any), [params?.launch_context, params?.battle_launch, params?.battle_launch_id]);
+  const rawLaunchContext = React.useMemo(
+    () => parseLaunchContextParam((params as any)?.launch_context),
+    [params?.launch_context],
+  );
+  const routeServerId = React.useMemo(
+    () => singleParamValue((params as any)?.server_id),
+    [params?.server_id],
+  );
+  const launchContextServerId = React.useMemo(() => {
+    return singleParamValue(v108LaunchEnvelope?.contract?.server_id)
+      || singleParamValue(rawLaunchContext?.server_id);
+  }, [rawLaunchContext?.server_id, v108LaunchEnvelope?.contract?.server_id]);
+  const rawLaunchContextValidForCombat = React.useMemo(() => {
+    if (!rawLaunchContext) return false;
+    return !!(
+      singleParamValue(rawLaunchContext.server_id)
+      && singleParamValue(rawLaunchContext.mode)
+      && singleParamValue(rawLaunchContext.encounter_id)
+      && rawLaunchContext.reward_policy === 'preview'
+      && rawLaunchContext.progress_policy === 'preview'
+      && rawLaunchContext.battle_engine_mode === 'preview'
+    );
+  }, [rawLaunchContext]);
+  const combatLaunchContextValid =
+    !!v108LaunchEnvelope?.is_valid || rawLaunchContextValidForCombat;
   const v108LaunchBadge = (v108LaunchEnvelope.is_valid ? 'PREVIEW_NON_AUTHORITATIVE' : 'LEGACY_COMBAT_ENTRY');
   // v108_POSTQA_A — Stato derivato per il preview reward lock.
   // isPreviewNonAuthoritative = TRUE se il combat parte da un launch_context valido
   // in modalita' preview. In questo stato il path runtime NON deve chiamare
   // simulate endpoint, ne' refresh user, ne' grant affinity, ne' mostrare reward.
-  const isPreviewNonAuthoritative = !!(v108LaunchEnvelope?.is_valid && v108LaunchEnvelope?.is_preview);
-  const isLegacyCombatEntryMutating = !v108LaunchEnvelope?.is_valid;
+  const isPreviewNonAuthoritative = !!(
+    combatLaunchContextValid
+    && (
+      (v108LaunchEnvelope?.is_valid && v108LaunchEnvelope?.is_preview)
+      || rawLaunchContext?.battle_engine_mode === 'preview'
+    )
+  );
+  const isLegacyCombatEntryMutating = !combatLaunchContextValid;
   // PREVIEW_REWARD_LOCK_ACTIVE token literal — usato dai runtime-invariant validators.
   const PREVIEW_REWARD_LOCK_ACTIVE = isPreviewNonAuthoritative;
   const LEGACY_COMBAT_ENTRY_MUTATING = isLegacyCombatEntryMutating;
@@ -128,6 +187,30 @@ export default function CombatScreen() {
     () => buildPreviewLocalTeamSnapshot(pack123PreviewCtx),
     [pack123PreviewCtx],
   );
+  const verifiedServerId = serverScope.isReady ? serverScope.selected_server_id : null;
+  const combatGateBlocker = React.useMemo(() => {
+    if (serverScope.loading) return null;
+    if (!serverScope.isReady || !verifiedServerId) return 'COMBAT_SERVER_SCOPE_REQUIRED';
+    if (!combatLaunchContextValid) return 'COMBAT_LAUNCH_CONTEXT_REQUIRED';
+    if (isPreviewLocalServerId(routeServerId) || isPreviewLocalServerId(launchContextServerId)) {
+      return 'COMBAT_PREVIEW_LOCAL_DISABLED_PRE_QA';
+    }
+    if (!launchContextServerId) return 'COMBAT_LAUNCH_SERVER_ID_REQUIRED';
+    if (launchContextServerId !== verifiedServerId) return 'COMBAT_SERVER_ID_SCOPE_MISMATCH';
+    if (routeServerId && routeServerId !== verifiedServerId) return 'COMBAT_ROUTE_SERVER_ID_SCOPE_MISMATCH';
+    if (pack123PreviewCtx.is_preview && isPreviewLocalServerId(routeServerId || launchContextServerId)) {
+      return 'COMBAT_PREVIEW_LOCAL_DISABLED_PRE_QA';
+    }
+    return null;
+  }, [
+    combatLaunchContextValid,
+    launchContextServerId,
+    pack123PreviewCtx.is_preview,
+    routeServerId,
+    serverScope.isReady,
+    serverScope.loading,
+    verifiedServerId,
+  ]);
   React.useEffect(() => { if (__DEV__) console.log('[v108_pre] combat launch envelope:', { is_valid: v108LaunchEnvelope.is_valid, source: v108LaunchEnvelope.source, badge: v108LaunchBadge }); }, [v108LaunchEnvelope.is_valid, v108LaunchEnvelope.source, v108LaunchBadge]);
   React.useEffect(() => { if (__DEV__) console.log('[v108_POSTQA_A] preview_reward_lock:', { PREVIEW_REWARD_LOCK_ACTIVE, LEGACY_COMBAT_ENTRY_MUTATING }); }, [PREVIEW_REWARD_LOCK_ACTIVE, LEGACY_COMBAT_ENTRY_MUTATING]);
   const { refreshUser } = useAuth();
@@ -194,6 +277,7 @@ export default function CombatScreen() {
   const timerRef = useRef<any>(null);
   const allTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const logRef = useRef<ScrollView>(null);
+  const battleStartedRef = useRef(false);
 
   // ---- Mappatura coordinate formazione → griglia display 3x3 ----
   // Backend usa sistema 1/4/7 per x (colonne) e y (righe).
@@ -299,7 +383,17 @@ export default function CombatScreen() {
     return L;
   }, [bfRect?.w, bfRect?.h, winW, winH]);
 
-  useEffect(() => { startBattle(); return () => { if (timerRef.current) clearTimeout(timerRef.current); allTimers.current.forEach(id => clearTimeout(id)); allTimers.current = []; }; }, []);
+  useEffect(() => {
+    if (serverScope.loading || battleStartedRef.current) return;
+    battleStartedRef.current = true;
+    startBattle();
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      allTimers.current.forEach(id => clearTimeout(id));
+      allTimers.current = [];
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverScope.loading, combatGateBlocker]);
 
   // BATTLE_DEBUG — trace phase/layout/rect changes con log [BATTLE_DEBUG]
   useEffect(() => {
@@ -380,6 +474,21 @@ export default function CombatScreen() {
   };
 
   const startBattle = async () => {
+    if (combatGateBlocker) {
+      if (__DEV__) {
+        console.warn('[pack_5d_3c][combat] direct combat blocked:', {
+          blocker: combatGateBlocker,
+          routeServerId,
+          launchContextServerId,
+          verifiedServerId,
+        });
+      }
+      setPhase('combat_blocked' as any);
+      setError('');
+      setLogLines([]);
+      logLinesRef.current = [];
+      return;
+    }
     // Pre-QA Stabilization 115E — LEGACY_COMBAT_ENTRY_BLOCKED_PRE_QA fail-closed.
     // Se il combat parte senza launch_context valido, il path legacy
     // /api/battle/simulate e' mutante backend. In pre-QA lo BLOCCHIAMO senza
@@ -401,7 +510,19 @@ export default function CombatScreen() {
     // NESSUN reward, NESSUN EXP, NESSUN progress, NESSUN DB write.
     if (PREVIEW_REWARD_LOCK_ACTIVE) {
       if (__DEV__) console.log('[pack_125] PREVIEW_COMBAT_REAL: action loop + preload, skipping simulate');
-      const previewCtxLocal = previewContextFromParams(params as Record<string, unknown>);
+      const previewCtxFromParams = previewContextFromParams(params as Record<string, unknown>);
+      const previewCtxLocal = previewCtxFromParams.is_preview
+        ? previewCtxFromParams
+        : {
+            is_preview:
+              rawLaunchContext?.reward_policy === 'preview'
+              && rawLaunchContext?.progress_policy === 'preview'
+              && rawLaunchContext?.battle_engine_mode === 'preview',
+            reward_policy: String(rawLaunchContext?.reward_policy || ''),
+            progress_policy: String(rawLaunchContext?.progress_policy || ''),
+            battle_engine_mode: String(rawLaunchContext?.battle_engine_mode || ''),
+            mode: String(rawLaunchContext?.mode || params.mode || ''),
+          };
       // HOTFIX G — Estrazione V1 dal payload JSON di `launch_context` (router
       // param valorizzato da `pre-battle-lobby.tsx`). NON da `previewCtxLocal`
       // (che non contiene team_formation_v1) e NON da
@@ -1183,6 +1304,36 @@ export default function CombatScreen() {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showLog, logTab, logLines, battleChat]);
+
+  if (phase === ('combat_blocked' as any) || combatGateBlocker) {
+    return (
+      <LinearGradient colors={[COLORS.bgPrimary, '#1A0A2E', '#0A0820']} style={st.fc}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 }}>
+          <Text style={{ fontSize: 48, marginBottom: 16 }}>{'\uD83D\uDD12'}</Text>
+          <Text style={{ color: '#FFD27F', fontSize: 20, fontWeight: '700', marginBottom: 16, textAlign: 'center' }}>
+            Combat direct bloccato
+          </Text>
+          <Text style={{ color: 'rgba(255,255,255,0.78)', fontSize: 14, textAlign: 'center', lineHeight: 20, marginBottom: 14 }}>
+            Questa battaglia richiede server verificato e launch_context reale coerente.
+            In pre-QA non sono ammessi preview_local, deeplink incompleti o mismatch server.
+          </Text>
+          <Text style={{ color: '#7B2CBF', fontSize: 12, fontFamily: 'monospace', marginBottom: 4, textAlign: 'center' }}>
+            {combatGateBlocker || 'COMBAT_DIRECT_ENTRY_BLOCKED_PRE_QA'}
+          </Text>
+          <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, fontFamily: 'monospace', marginBottom: 28, textAlign: 'center' }}>
+            server_id={launchContextServerId || routeServerId || '\u2205'} · verified={verifiedServerId || '\u2205'}
+          </Text>
+          <TouchableOpacity
+            onPress={() => { try { router.replace('/servers' as any); } catch (_e) {} }}
+            activeOpacity={0.85}
+            style={{ backgroundColor: '#7B2CBF', paddingHorizontal: 24, paddingVertical: 12, borderRadius: 10 }}
+          >
+            <Text style={{ color: '#fff', fontWeight: '700' }}>Scegli server</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    );
+  }
 
   // Pre-QA Stabilization 115E — LEGACY_COMBAT_ENTRY_BLOCKED_PRE_QA render branch.
   // Mostra schermata bloccata onesta quando combat parte senza launch_context valido.
