@@ -20,18 +20,24 @@ export default function StoryScreen() {
   const router = useRouter();
   const { refreshUser } = useAuth();
   // Pack 92 — server scope sweep su story progress reader player-facing.
-  const { selected_server_id } = useServerScope();
+  const serverScope = useServerScope();
+  const selected_server_id = serverScope.isReady ? serverScope.selected_server_id : null;
+  const storyServerReady = !!(!serverScope.loading && serverScope.isReady && selected_server_id);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [battling, setBattling] = useState(false);
 
-  useEffect(() => { load(); }, [selected_server_id]);
+  useEffect(() => { load(); }, [serverScope.loading, serverScope.isReady, selected_server_id]);
   const load = async () => {
+    if (serverScope.loading) {
+      setLoading(true);
+      return;
+    }
+    setLoading(true);
     try {
       // Pre-QA Stabilization 115C — fail-closed se manca server_id (no fallback account-wide).
-      if (!selected_server_id) {
+      if (!storyServerReady || !selected_server_id) {
         setData(null);
-        setLoading(false);
         return;
       }
       const url = `/api/story/chapters?server_id=${encodeURIComponent(selected_server_id)}`;
@@ -41,6 +47,10 @@ export default function StoryScreen() {
   };
 
   const doBattle = async (chId: number, stage: number) => {
+    if (!storyServerReady || !selected_server_id) {
+      router.replace('/servers' as any);
+      return;
+    }
     setBattling(true);
     try {
       const r = await apiCall('/api/story/battle', { method:'POST', body: JSON.stringify({chapter_id:chId, stage}) });
@@ -56,16 +66,22 @@ export default function StoryScreen() {
   // Naviga al lobby con i parametri canonici del Battle Launch Contract v1.
   // PREVIEW_NON_AUTHORITATIVE: nessun reward live, nessun progress write in questo step.
   const launchBattleViaLobby = (chId: number, stage: number) => {
+    if (!storyServerReady || !selected_server_id) {
+      router.replace('/servers' as any);
+      return;
+    }
     const encounterId = `story_${chId}_${stage}`;
     router.push({
       pathname: '/pre-battle-lobby',
       params: {
         mode: 'story',
+        source_id: encounterId,
         encounter_id: encounterId,
         enemy_source_type: 'authored',
         enemy_source_id: encounterId,
         chapter_id: String(chId),
         stage: String(stage),
+        server_id: selected_server_id,
         v108_pre: '1',
       },
     });
@@ -74,7 +90,7 @@ export default function StoryScreen() {
   if (loading) return <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1}}><ActivityIndicator size="large" color="#ff6b35" /></LinearGradient>;
 
   // Pre-QA Stabilization 115C — stato server-required (no fallback account-wide).
-  if (!selected_server_id) {
+  if (!storyServerReady) {
     return (
       <LinearGradient colors={[COLORS.bgPrimary, '#0D0D2B', '#0A0820']} style={{flex: 1, padding: 24, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={{ color: '#FFD27F', fontSize: 18, fontWeight: '700', marginBottom: 12, textAlign: 'center' }}>Server richiesto</Text>
@@ -111,12 +127,12 @@ export default function StoryScreen() {
               {ch.unlocked && !ch.fully_completed && (
                 <View style={{ flexDirection: 'column', alignItems: 'stretch', gap: 4 }}>
                   {/* v108_pre — pulsante player-facing primario: porta al Pre-Battle Lobby (Battle Launch Contract v1, preview non-authoritative). */}
-                  <TouchableOpacity style={[s.playBtn, {backgroundColor:col+'30', borderColor:col}]} onPress={() => launchBattleViaLobby(ch.id, ch.completed_stages+1)} disabled={battling}>
+                  <TouchableOpacity style={[s.playBtn, {backgroundColor:col+'30', borderColor:col}]} onPress={() => launchBattleViaLobby(ch.id, ch.completed_stages+1)} disabled={battling || !storyServerReady}>
                     <Text style={[s.playTxt, {color:col}]}>Avvia battaglia</Text>
                   </TouchableOpacity>
                   {/* v108_POSTQA_A — QA-AutoResolve nascosto dal player-facing. EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE Visibile SOLO se EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE === 'true'. Default OFF. */}
                   {process.env.EXPO_PUBLIC_SHOW_QA_AUTO_RESOLVE === 'true' ? (
-                    <TouchableOpacity style={[s.qaBtn, {borderColor:'rgba(255,255,255,0.18)'}]} onPress={() => doBattle(ch.id, ch.completed_stages+1)} disabled={battling}>
+                    <TouchableOpacity style={[s.qaBtn, {borderColor:'rgba(255,255,255,0.18)'}]} onPress={() => doBattle(ch.id, ch.completed_stages+1)} disabled={battling || !storyServerReady}>
                       <Text style={s.qaTxt}>{battling?'...':'QA Auto Resolve'}</Text>
                     </TouchableOpacity>
                   ) : null}

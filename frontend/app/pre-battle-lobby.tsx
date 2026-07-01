@@ -368,6 +368,19 @@ export default function PreBattleLobbyScreen() {
   const serverScope = useServerScope();
   const selectedServerId = serverScope.isReady ? serverScope.selected_server_id : null;
   const selectedServerLoaded = !serverScope.loading;
+  const routeServerId = useMemo(() => {
+    const raw = params.server_id;
+    const value = Array.isArray(raw) ? raw[0] : raw;
+    return value ? value.toString().trim() || null : null;
+  }, [params.server_id]);
+  const routeServerBlocker = useMemo(() => {
+    if (previewFallbackActive) return null;
+    if (!selectedServerLoaded) return null;
+    if (!selectedServerId) return 'SELECTED_SERVER_REQUIRED';
+    if (!routeServerId) return 'LOBBY_SERVER_ID_PARAM_REQUIRED';
+    if (routeServerId !== selectedServerId) return 'LOBBY_SERVER_ID_SCOPE_MISMATCH';
+    return null;
+  }, [previewFallbackActive, routeServerId, selectedServerId, selectedServerLoaded]);
   // HOTFIX G — state per propagazione V1 verso /combat. Popolato dal
   // fetch GET /api/team/get-formation (HOTFIX E backend) e propagato nel
   // launch_context. Owned id primario = user_hero_id; canonical_id metadata.
@@ -376,15 +389,16 @@ export default function PreBattleLobbyScreen() {
 
   useEffect(() => {
     if (previewFallbackActive) return;
-    if (serverScope.loading || serverScope.isReady) return;
+    if (serverScope.loading) return;
+    if (serverScope.isReady && !routeServerBlocker) return;
     router.replace('/servers');
-  }, [previewFallbackActive, router, serverScope.loading, serverScope.isReady]);
+  }, [previewFallbackActive, routeServerBlocker, router, serverScope.loading, serverScope.isReady]);
 
   // v107D — Real binding to /api/battle/launch (gated, default OFF, telemetry only).
   useEffect(() => {
     const enabled = (process.env.EXPO_PUBLIC_V107D_PREVIEW_LAUNCH_ENABLED || '').toString() === 'true';
     if (!enabled) return;
-    if (!previewFallbackActive && (!selectedServerLoaded || !selectedServerId)) return;
+    if (!previewFallbackActive && (!selectedServerLoaded || !selectedServerId || routeServerBlocker)) return;
     let cancelled = false;
     (async () => {
       try {
@@ -398,7 +412,7 @@ export default function PreBattleLobbyScreen() {
       } catch (_e) { /* preview-only */ }
     })();
     return () => { cancelled = true; };
-  }, [mode, params.source_id, v108EncounterId, v108EnemySourceId, playerTeam, previewFallbackActive, selectedServerLoaded, selectedServerId]);
+  }, [mode, params.source_id, routeServerBlocker, v108EncounterId, v108EnemySourceId, playerTeam, previewFallbackActive, selectedServerLoaded, selectedServerId]);
 
   // v95 — Endpoint runtime fetch (read-only catalog) per dichiarare la source attiva.
   //  - endpoint_active=true      → /api/encounter-source/get raggiunto e dati validi
@@ -439,13 +453,13 @@ export default function PreBattleLobbyScreen() {
   // NESSUNA fake team. Slot mancanti = empty cards onesti.
   useEffect(() => {
     if (!selectedServerLoaded) return;
-    if (!selectedServerId) {
+    if (!selectedServerId || routeServerBlocker) {
       setPlayerFormation({
         ...INITIAL_PLAYER_FORMATION,
         team: PLAYER_SAFE_FALLBACK_TEAM,
         source: 'blocked_no_team_for_server',
         fallback_used: true,
-        blocker: 'SELECTED_SERVER_REQUIRED',
+        blocker: routeServerBlocker || 'SELECTED_SERVER_REQUIRED',
         fetch_status: 'skipped_no_server',
         raw_slot_count: 0,
       });
@@ -557,7 +571,7 @@ export default function PreBattleLobbyScreen() {
       }
     })();
     return () => { cancelled = true; ctrl.abort(); };
-  }, [selectedServerLoaded, selectedServerId, backendUrl]);
+  }, [selectedServerLoaded, selectedServerId, routeServerBlocker, backendUrl]);
 
   // v108_POSTQA_A — Blocker chain onesti.
   // 1) REAL_PLAYER_TEAM_SOURCE_PENDING: il team del player e' ancora il safe_fallback,
@@ -574,11 +588,12 @@ export default function PreBattleLobbyScreen() {
     && (playerFormation.team?.length || 0) > 0
   );
   const authoredEncounterAvailable = !!(encounter && encounter.source_type === 'authored' && (encounter.enemies?.length || 0) > 0);
-  const selectedServerAvailable = !!(selectedServerLoaded && selectedServerId);
+  const selectedServerAvailable = !!(selectedServerLoaded && selectedServerId && !routeServerBlocker);
   const blockerReasons: string[] = [];
   if (!realPlayerTeamAvailable) blockerReasons.push('PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER');
   if (!authoredEncounterAvailable) blockerReasons.push('AUTHORED_ENCOUNTER_SOURCE_PENDING');
-  if (!selectedServerAvailable) blockerReasons.push('SELECTED_SERVER_REQUIRED');
+  if (routeServerBlocker) blockerReasons.push(routeServerBlocker);
+  else if (!selectedServerAvailable) blockerReasons.push('SELECTED_SERVER_REQUIRED');
   const launchAllowedNormal = blockerReasons.length === 0;
   const qaFallbackEnabled = process.env.EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH === 'true';
   // Pack 123 — Preview fallback bypassa la blocker chain SOLO quando tutti
@@ -607,7 +622,11 @@ export default function PreBattleLobbyScreen() {
       return;
     }
     if (!selectedServerAvailable) {
-      if (__DEV__) console.warn('[pack_5d_1][pre-battle-lobby] launch blocked: verified server required');
+      if (__DEV__) console.warn('[pack_5d_2][pre-battle-lobby] launch blocked: verified matching server required', {
+        routeServerId,
+        selectedServerId,
+        routeServerBlocker,
+      });
       router.replace('/servers');
       return;
     }
@@ -645,7 +664,7 @@ export default function PreBattleLobbyScreen() {
       is_preview: true,
       reward_policy: 'preview',
       progress_policy: 'preview',
-      server_id: selectedServerId || 'unknown',
+      server_id: routeServerId || selectedServerId || 'unknown',
       mode,
       encounter_id: encounter.encounter_id,
       source_id: encounter.source_id,
