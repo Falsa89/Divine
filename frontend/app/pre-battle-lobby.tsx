@@ -45,12 +45,12 @@ import useServerScope from '../src/hooks/useServerScope';
 // Pack 123 — Preview Team Fallback runtime wiring (no-write, no-DB, no-grant).
 import {
   buildPreviewLocalTeamSnapshot,
-  buildPreviewCombatUrl,
   previewContextFromParams,
-  PREVIEW_TEAM_BANNER_IT,
 } from '../src/utils/previewBattleTeam';
 // Pre-QA Stabilization 114B — Bearer token bridged via dynamic authTokenCompat.
 // Direct expo-secure-store import rimosso (dead code). Vedi src/utils/authTokenCompat.ts.
+
+const PREVIEW_LOCAL_LOBBY_DISABLED_PRE_QA = 'PREVIEW_LOCAL_LOBBY_DISABLED_PRE_QA';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Inline catalog mirror — DETERMINISTIC, NO RUNTIME RANDOM
@@ -347,21 +347,12 @@ export default function PreBattleLobbyScreen() {
     source: initialFormation.source,
     fallback_used: initialFormation.fallback_used,
   });
-  // Pack 123 — Quando preview fallback e' attivo, il team da renderizzare e
-  // da passare a combat e' il preview team locale (no DB write, no save team).
-  // Quando NON e' attivo: comportamento originale (real fetch + blocker chain).
+  // Pack 5D-3B — preview/local fallback is blocked in player-facing pre-QA.
+  // Render only the real server-scoped formation path; preview_local must not
+  // provide a local team or launch context from this lobby.
   const playerTeam = useMemo<EnemyUnit[]>(() => {
-    if (previewFallbackActive && previewTeamSnapshot) {
-      return previewTeamSnapshot.slots.map((s) => ({
-        hero_id: s.hero_id,
-        role: s.role,
-        level: s.level,
-        stars: s.stars,
-        power: s.power,
-      }));
-    }
     return playerFormation.team;
-  }, [previewFallbackActive, previewTeamSnapshot, playerFormation.team]);
+  }, [playerFormation.team]);
 
   // Pack 5D-1 — Selected server solo da scope verificato. La lobby non crea PSP/roster
   // e non legge direttamente v101_selected_server_id: se il server non e' pronto, fail-closed.
@@ -374,7 +365,7 @@ export default function PreBattleLobbyScreen() {
     return value ? value.toString().trim() || null : null;
   }, [params.server_id]);
   const routeServerBlocker = useMemo(() => {
-    if (previewFallbackActive) return null;
+    if (previewFallbackActive || routeServerId === 'preview_local') return PREVIEW_LOCAL_LOBBY_DISABLED_PRE_QA;
     if (!selectedServerLoaded) return null;
     if (!selectedServerId) return 'SELECTED_SERVER_REQUIRED';
     if (!routeServerId) return 'LOBBY_SERVER_ID_PARAM_REQUIRED';
@@ -398,7 +389,8 @@ export default function PreBattleLobbyScreen() {
   useEffect(() => {
     const enabled = (process.env.EXPO_PUBLIC_V107D_PREVIEW_LAUNCH_ENABLED || '').toString() === 'true';
     if (!enabled) return;
-    if (!previewFallbackActive && (!selectedServerLoaded || !selectedServerId || routeServerBlocker)) return;
+    if (previewFallbackActive) return;
+    if (!selectedServerLoaded || !selectedServerId || routeServerBlocker) return;
     let cancelled = false;
     (async () => {
       try {
@@ -596,29 +588,16 @@ export default function PreBattleLobbyScreen() {
   else if (!selectedServerAvailable) blockerReasons.push('SELECTED_SERVER_REQUIRED');
   const launchAllowedNormal = blockerReasons.length === 0;
   const qaFallbackEnabled = process.env.EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH === 'true';
-  // Pack 123 — Preview fallback bypassa la blocker chain SOLO quando tutti
-  // i flag preview sono coerenti (fail-closed in `previewContextFromParams`).
-  // Non altera reward_policy/progress_policy: tutto resta preview-only.
-  const launchAllowedPreviewFallback = previewFallbackActive;
-  const launchDisabled = !launchAllowedPreviewFallback
-    && (!selectedServerAvailable || (!launchAllowedNormal && !qaFallbackEnabled));
+  // Pack 5D-3B — preview/local fallback is blocked in the lobby. 5D-3C will
+  // handle direct /combat/deeplink enforcement separately.
+  const launchDisabled = !selectedServerAvailable || (!launchAllowedNormal && !qaFallbackEnabled);
 
   const startBattle = () => {
-    // Pack 123 — Preview fallback: usa URL canonica preview-only.
-    // NESSUN reward, NESSUN progress, NESSUN save team, NESSUN DB write.
     if (previewFallbackActive) {
-      const target = buildPreviewCombatUrl({
-        mode: previewCtx.mode as any,
-        encounter_id: (params.encounter_id || encounter.encounter_id || `enc_${previewCtx.mode}_preview`).toString(),
-        enemy_source_id: (params.enemy_source_id || encounter.source_id || `${previewCtx.mode}_preview_enemy`).toString(),
-        enemy_source_type: 'authored',
-        server_id: 'preview_local',
-        floor_id: params.floor_id ? String(params.floor_id) : undefined,
-        opponent_id: params.opponent_id ? String(params.opponent_id) : undefined,
-        boss_id: params.boss_id ? String(params.boss_id) : undefined,
-        trial_id: params.trial_id ? String(params.trial_id) : undefined,
+      if (__DEV__) console.warn('[pack_5d_3b][pre-battle-lobby] preview_local launch blocked:', {
+        blocker: PREVIEW_LOCAL_LOBBY_DISABLED_PRE_QA,
+        mode: previewCtx.mode,
       });
-      router.push(target as any);
       return;
     }
     if (!selectedServerAvailable) {
@@ -710,18 +689,18 @@ export default function PreBattleLobbyScreen() {
           {/* Source canonica */}
           <SourceBadge enc={encounter} />
 
-          {/* Pack 123 — Banner Preview Team Locale (no-save, no-DB, no-grant). */}
+          {/* Pack 5D-3B — preview/local lobby flow is blocked in player-facing pre-QA. */}
           {previewFallbackActive ? (
             <View style={s.previewFallbackBanner}>
               <Text style={s.previewFallbackBannerTitle}>
-                {'\u26A0\uFE0F  PACK 123 — PREVIEW TEAM FALLBACK ATTIVO'}
+                {'\u26D4 PREVIEW LOCAL DISABILITATA'}
               </Text>
-              <Text style={s.previewFallbackBannerText}>{PREVIEW_TEAM_BANNER_IT}</Text>
+              <Text style={s.previewFallbackBannerText}>{PREVIEW_LOCAL_LOBBY_DISABLED_PRE_QA}</Text>
               <Text style={s.previewFallbackBannerMeta}>
-                {`mode=${previewCtx.mode} \u00b7 reward_policy=preview \u00b7 progress_policy=preview \u00b7 battle_engine_mode=preview`}
+                {`mode=${previewCtx.mode} \u00b7 redirect=blocked \u00b7 combat_launch=false`}
               </Text>
               <Text style={s.previewFallbackBannerMeta}>
-                {`db_write=false \u00b7 save_team=false \u00b7 grant_hero=false \u00b7 roster_mutation=false`}
+                {`flow richiesto: server verificato \u00b7 TeamFormation V1 \u00b7 lobby reale`}
               </Text>
             </View>
           ) : null}
@@ -796,8 +775,8 @@ export default function PreBattleLobbyScreen() {
               disabled={launchDisabled}
             >
               <Text style={s.actionTxt}>{
-                launchAllowedPreviewFallback
-                  ? '\u25B6 Avvia Preview (Team Locale)'
+                previewFallbackActive
+                  ? '\u26D4 Preview locale disabilitata'
                   : (!launchAllowedNormal && !qaFallbackEnabled)
                     ? '\u26D4 Launch bloccato'
                     : (qaFallbackEnabled && !launchAllowedNormal ? '\u25B6 Avvia (QA Fallback)' : '\u25B6 Avvia Battaglia')
