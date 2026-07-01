@@ -28,9 +28,6 @@ const CATEGORIES = [
       // Pack 119C: "Storia" -> "Capitoli Storia" per disambiguare dall'omonima
       // voce "Storia" della categoria "Battaglia" (che lancia pre-battle-lobby).
       { label: 'Capitoli Storia', icon: '\uD83D\uDCDC', route: '/story', gradient: ['#FF6B35', '#CC4422'] as const },
-      // PROJECT_HOME_MENU_REWIRING v20: legacy '/tower' link redirected to canonical TEST MVP '/tower-of-the-hells'. Tower gameplay/progress/AsyncStorage NOT touched in this pack.
-      // Pack 119B: label tecnico "(TEST)" rimosso (player-facing copy pulita).
-      { label: 'Torre degli Inferi', icon: '\uD83C\uDFEF', route: '/tower-of-the-hells', gradient: ['#8844FF', '#5522CC'] as const },
       { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/pvp', gradient: ['#FF4444', '#CC2222'] as const },
       // Pack 119B: Fucina di Efesto spostata in Progressione (non e' una modalita' di combattimento).
       // SF_MERGE Track F \u2014 Oggetti Esclusivi rimosso dal menu player.
@@ -42,7 +39,6 @@ const CATEGORIES = [
     title: 'Progressione',
     items: [
       { label: 'Collezione Eroi', icon: '\uD83D\uDCDA', route: '/hero-collection', gradient: ['#FFD700', '#CC9900'] as const },
-      { label: 'Addestramento Eroico', icon: '\u2694\uFE0F', route: '/hero-training', gradient: ['#FFD700', '#BB55FF'] as const },
       // Pack 119B: Fucina di Efesto spostata qui (da Combattimento). Hub forging/equipaggiamento.
       { label: 'Fucina di Efesto', icon: '\u2692\uFE0F', route: '/equipment', gradient: ['#FFAA44', '#CC6622'] as const },
       { label: 'Santuario', icon: '\u26E9\uFE0F', route: '/sanctuary', gradient: ['#FF77CC', '#CC5599'] as const },
@@ -153,19 +149,12 @@ const CATEGORIES = [
     // db_writes=0 / reward_live=false / endpoint_live=false / random_opponents_allowed=false.
     // Pack 119B: titolo player-facing pulito (era "Battaglia (Renderer Reale v90)").
     // Marker tecnico v90 rimosso dalla UI; logica renderer reale + pre-battle-lobby preservata.
-    // Pack 122 Track A — entrypoint semantic fix dopo Device QA 121.
-    // Le voci "Storia/Torre/Addestramento" NON puntano piu' direttamente alla
-    // pre-battle-lobby. Ora portano agli hub canonici (gia' raggiungibili da
-    // Avventura/Progressione). Arena/Raid passano dai nuovi hub di selezione
-    // preview (arena-preview / boss-raid-preview) deterministici no-write.
-    // Nessun direct lobby entry player-facing per i 5 mode.
+    // Pack 5D-3A: alpha player-facing battle entry remains Story only.
+    // Other mode preview/local hubs are blocked until they use the real
+    // server/team/lobby flow.
     title: 'Battaglia',
     items: [
       { label: 'Storia', icon: '\uD83D\uDCDC', route: '/story', gradient: ['#FF6B35', '#CC4422'] as const },
-      { label: 'Torre', icon: '\uD83C\uDFEF', route: '/tower-of-the-hells', gradient: ['#8844FF', '#5522CC'] as const },
-      { label: 'Arena PvP', icon: '\uD83E\uDD4A', route: '/arena-preview', gradient: ['#FF4444', '#CC2222'] as const },
-      { label: 'Addestramento', icon: '\u2694\uFE0F', route: '/hero-training', gradient: ['#FFD700', '#BB55FF'] as const },
-      { label: 'Raid', icon: '\uD83D\uDC32', route: '/boss-raid-preview', gradient: ['#FF5544', '#CC3322'] as const },
     ],
   },
   {

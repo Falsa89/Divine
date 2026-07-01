@@ -2091,7 +2091,6 @@ function HomeOverflowPanel({ open, onClose, router }: any) {
   };
   const _allItemsRaw: Array<OverflowItem & { route: string }> = [
     { key: 'story',      label: 'Storia',           icon: '\uD83D\uDCDC', route: '/story',            onPress: () => _pushPreQaGuarded('/story') },
-    { key: 'tower',      label: 'Torre',            icon: '\uD83C\uDFEF', route: '/tower-of-the-hells', onPress: () => _pushPreQaGuarded('/tower-of-the-hells') },
     { key: 'guide',      label: 'Guida',            icon: '\uD83D\uDCD6', route: '/guide',            onPress: () => _pushPreQaGuarded('/guide') },
     { key: 'raid',       label: 'Raid',             icon: '\uD83D\uDD25', route: '/raid',             onPress: () => _pushPreQaGuarded('/raid') },
     { key: 'events',     label: 'Eventi',           icon: '\uD83C\uDF1F', route: '/events',           onPress: () => _pushPreQaGuarded('/events') },

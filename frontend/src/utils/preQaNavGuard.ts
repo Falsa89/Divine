@@ -65,6 +65,11 @@ export const PRE_QA_BLOCKED_PLAYER_ROUTES: ReadonlySet<string> = new Set<string>
   '/profile',
   // Pre-QA Stabilization 115E — Tower legacy route fail-closed.
   '/tower',
+  // Pack 5D-3A — preview/local battle hubs are not player-facing alpha routes.
+  '/tower-of-the-hells',
+  '/arena-preview',
+  '/boss-raid-preview',
+  '/hero-training',
   // Pre-QA Stabilization 115A — HomeOverflow dead-link `/research` (no research.tsx).
   '/research',
   // Pre-QA Pack 119B — Catalog/internal/dev-only routes nascoste dal menu pubblico.
