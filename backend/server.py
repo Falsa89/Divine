@@ -1032,11 +1032,17 @@ async def get_gacha_banners():
 
 # ===================== TEAM =====================
 @app.get("/api/team")
-async def get_team(current_user: dict = Depends(get_current_user)):
-    team = await db.teams.find_one({"user_id": current_user["id"], "is_active": True})
-    if team:
-        return serialize_doc(team)
-    return {"formation": [], "total_power": 0}
+async def get_team(server_id: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+    raise HTTPException(
+        status_code=400,
+        detail={
+            "blocker": "SERVER_ID_REQUIRED_FOR_GAMEPLAY_STATE",
+            "route": "/api/team",
+            "message": "Legacy /api/team is disabled for server-bound team reads. Use /api/team/get-formation with an explicit server_id.",
+            "replacement_route": "/api/team/get-formation",
+            "server_id_received": bool(server_id and isinstance(server_id, str) and server_id.strip()),
+        },
+    )
 
 # ===================== UTILITY =====================
 def calculate_hero_power(hero: dict, user_hero: dict = None) -> int:
