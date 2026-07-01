@@ -5,7 +5,7 @@
  * Mostra:
  *   - source_type / source_id / encounter_id deterministici (NESSUN random runtime)
  *   - dettagli dell'avversario (team / boss) caricati da catalogo canonico locale
- *   - team del player (saved formation, letto da AsyncStorage / fallback locale)
+ *   - team del player (saved formation server-scoped / fallback locale)
  *   - bottone "Modifica Team" → /(tabs)/battle (formation editor esistente)
  *   - bottone "Avvia Battaglia" → /combat?mode=X&encounter_id=Y&source_id=Z
  *
@@ -40,8 +40,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { launchFromLobby } from '../src/battle_launch/consumers/preBattleLobbyAdapter';
 // Pack 126-FIX-B FIX D — resolver URL backend canonico.
 import getCanonicalBackendUrl from '../src/utils/backendUrl';
-// v108_POSTQA_A — AsyncStorage per leggere selected server reale (NO hardcoded 's1').
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// Pack 5D-1 — la lobby consuma solo server scope gia' verificato, senza PSP ensure.
+import useServerScope from '../src/hooks/useServerScope';
 // Pack 123 — Preview Team Fallback runtime wiring (no-write, no-DB, no-grant).
 import {
   buildPreviewLocalTeamSnapshot,
@@ -363,32 +363,28 @@ export default function PreBattleLobbyScreen() {
     return playerFormation.team;
   }, [previewFallbackActive, previewTeamSnapshot, playerFormation.team]);
 
-  // v108_POSTQA_A — Selected server reale da AsyncStorage. NO hardcoded 's1'.
-  // Pack 80: dichiarazione anticipata per evitare temporal dead zone con v107D useEffect.
-  // Se manca, mostriamo blocker SELECTED_SERVER_REQUIRED e disabilitiamo launch.
-  const [selectedServerId, setSelectedServerId] = useState<string | null>(null);
-  const [selectedServerLoaded, setSelectedServerLoaded] = useState<boolean>(false);
+  // Pack 5D-1 — Selected server solo da scope verificato. La lobby non crea PSP/roster
+  // e non legge direttamente v101_selected_server_id: se il server non e' pronto, fail-closed.
+  const serverScope = useServerScope();
+  const selectedServerId = serverScope.isReady ? serverScope.selected_server_id : null;
+  const selectedServerLoaded = !serverScope.loading;
   // HOTFIX G — state per propagazione V1 verso /combat. Popolato dal
   // fetch GET /api/team/get-formation (HOTFIX E backend) e propagato nel
   // launch_context. Owned id primario = user_hero_id; canonical_id metadata.
   const [hotfixGTeamV1, setHotfixGTeamV1] = useState<TeamFormationV1Slot[]>([]);
   const [hotfixGTeamV1Warnings, setHotfixGTeamV1Warnings] = useState<TeamFormationV1Warning[]>([]);
+
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        // Pre-QA Stabilization 112 — server key fix: usa v101_selected_server_id canonical.
-        const sid = await AsyncStorage.getItem('v101_selected_server_id');
-        if (!cancelled) { setSelectedServerId(sid && sid.trim() ? sid.trim() : null); setSelectedServerLoaded(true); }
-      } catch (_e) { if (!cancelled) { setSelectedServerId(null); setSelectedServerLoaded(true); } }
-    })();
-    return () => { cancelled = true; };
-  }, []);
+    if (previewFallbackActive) return;
+    if (serverScope.loading || serverScope.isReady) return;
+    router.replace('/servers');
+  }, [previewFallbackActive, router, serverScope.loading, serverScope.isReady]);
 
   // v107D — Real binding to /api/battle/launch (gated, default OFF, telemetry only).
   useEffect(() => {
     const enabled = (process.env.EXPO_PUBLIC_V107D_PREVIEW_LAUNCH_ENABLED || '').toString() === 'true';
     if (!enabled) return;
+    if (!previewFallbackActive && (!selectedServerLoaded || !selectedServerId)) return;
     let cancelled = false;
     (async () => {
       try {
@@ -402,7 +398,7 @@ export default function PreBattleLobbyScreen() {
       } catch (_e) { /* preview-only */ }
     })();
     return () => { cancelled = true; };
-  }, [mode, params.source_id, v108EncounterId, v108EnemySourceId, playerTeam, selectedServerId]);
+  }, [mode, params.source_id, v108EncounterId, v108EnemySourceId, playerTeam, previewFallbackActive, selectedServerLoaded, selectedServerId]);
 
   // v95 — Endpoint runtime fetch (read-only catalog) per dichiarare la source attiva.
   //  - endpoint_active=true      → /api/encounter-source/get raggiunto e dati validi
@@ -415,49 +411,6 @@ export default function PreBattleLobbyScreen() {
   const backendUrl = React.useMemo(() => getCanonicalBackendUrl(), []);
   const [v95SourceStatus, setV95SourceStatus] = useState<'unknown' | 'endpoint_active' | 'endpoint_fetch_failed_fallback_local_readonly'>('unknown');
 
-  // Pack 86 — Defensive UI ensure guard. Se la lobby viene aperta con un
-  // server_id selezionato MA il flusso servers.tsx non ha avuto modo di
-  // chiamare /api/psp/ensure (deep-link, hot-reload, navigation diretta),
-  // chiamiamo qui in modo idempotente. Il backend e' Pack 85 idempotente:
-  // se PSP esiste gia' ritorna already_exists_no_write senza writes.
-  // NO silent 's1', NO global fallback, NO copia S1->S2.
-  useEffect(() => {
-    if (!selectedServerLoaded || !selectedServerId) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const { getAuthTokenCompat: _gtc } = await import('../src/utils/authTokenCompat');
-        const _lookup = await _gtc();
-        const token = _lookup.token;
-        if (!token || !backendUrl) return;
-        const url = `${backendUrl}/api/psp/ensure?server_id=${encodeURIComponent(selectedServerId)}`;
-        const r = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'X-Pack-86-Lobby-Defensive-Ensure': 'true',
-          },
-        });
-        if (!cancelled && r.ok) {
-          const j = await r.json();
-          if (j && j.v110_psp_ensure === true) {
-            try {
-              await AsyncStorage.setItem(
-                'pack86_psp_ensure_last_mode',
-                j.created ? 'fresh_start_created' : 'already_exists_no_write',
-              );
-              await AsyncStorage.setItem(
-                'pack86_psp_ensure_last_server_id',
-                selectedServerId,
-              );
-            } catch (_e) { /* best-effort */ }
-          }
-        }
-      } catch (_e) { /* best-effort: lobby blocker downstream */ }
-    })();
-    return () => { cancelled = true; };
-  }, [selectedServerLoaded, selectedServerId, backendUrl]);
   useEffect(() => {
     let cancelled = false;
     const ctrl = new AbortController();
@@ -632,6 +585,8 @@ export default function PreBattleLobbyScreen() {
   // i flag preview sono coerenti (fail-closed in `previewContextFromParams`).
   // Non altera reward_policy/progress_policy: tutto resta preview-only.
   const launchAllowedPreviewFallback = previewFallbackActive;
+  const launchDisabled = !launchAllowedPreviewFallback
+    && (!selectedServerAvailable || (!launchAllowedNormal && !qaFallbackEnabled));
 
   const startBattle = () => {
     // Pack 123 — Preview fallback: usa URL canonica preview-only.
@@ -649,6 +604,11 @@ export default function PreBattleLobbyScreen() {
         trial_id: params.trial_id ? String(params.trial_id) : undefined,
       });
       router.push(target as any);
+      return;
+    }
+    if (!selectedServerAvailable) {
+      if (__DEV__) console.warn('[pack_5d_1][pre-battle-lobby] launch blocked: verified server required');
+      router.replace('/servers');
       return;
     }
     // v108_POSTQA_A — Bloccatore onesto: se non e' tutto reale, NON entrare in /combat
@@ -811,10 +771,10 @@ export default function PreBattleLobbyScreen() {
               <Text style={s.actionTxt}>✎ Modifica Team</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[s.actionBtn, s.actionStart, (!launchAllowedNormal && !qaFallbackEnabled && !launchAllowedPreviewFallback) ? { opacity: 0.4 } : null]}
+              style={[s.actionBtn, s.actionStart, launchDisabled ? { opacity: 0.4 } : null]}
               onPress={startBattle}
               activeOpacity={0.85}
-              disabled={!launchAllowedNormal && !qaFallbackEnabled && !launchAllowedPreviewFallback}
+              disabled={launchDisabled}
             >
               <Text style={s.actionTxt}>{
                 launchAllowedPreviewFallback
