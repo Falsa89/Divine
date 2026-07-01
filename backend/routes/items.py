@@ -90,6 +90,15 @@ def register_items_routes(router, db, get_current_user):
             "pack_89_inventory_strict_server_scope": True,
             "server_id": server_id,
         }
+        if not server_id or not isinstance(server_id, str) or not server_id.strip():
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "blocker": "SERVER_ID_REQUIRED_FOR_GAMEPLAY_STATE",
+                    "route": "/api/inventory",
+                    "message": "server_id is required for server-bound inventory reads.",
+                },
+            )
 
         # ---- Pack 89 STRICT SERVER-SCOPED path ----
         if server_id:

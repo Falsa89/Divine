@@ -114,6 +114,11 @@ def register_combat_routes(router, db, get_current_user, serialize_doc, calculat
 
         # Legacy non-player-facing path (no server_id). Pack 4C: read-only fallback,
         # no insert-on-read.
+        raise HTTPException(400, detail={
+            "blocker": "SERVER_ID_REQUIRED_FOR_GAMEPLAY_STATE",
+            "route": "/api/story/chapters",
+            "message": "server_id is required for server-bound story progress reads.",
+        })
         progress = await db.story_progress.find_one({"user_id": current_user["id"]})
         progress_missing = False
         if not progress:

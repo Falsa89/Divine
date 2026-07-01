@@ -245,6 +245,14 @@ def create_team_formation_router(db, get_current_user):
         # =====================================================================
         # Esiste solo per backward compat di tool/debug non player-facing.
         # NESSUNA promessa di server-scope; nessun filter_applied.
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "blocker": "SERVER_ID_REQUIRED_FOR_GAMEPLAY_STATE",
+                "route": "/api/team/get-formation",
+                "message": "server_id is required for server-bound team formation reads.",
+            },
+        )
         legacy_team_formation = user.get("team_formation") or []
         if not legacy_team_formation:
             return {

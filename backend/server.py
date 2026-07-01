@@ -789,6 +789,14 @@ async def get_user_heroes(
         if starter_catalog_missing_ids:
             response.headers["X-Starter-Catalog-Missing"] = ",".join(starter_catalog_missing_ids)
         return result
+    raise HTTPException(
+        status_code=400,
+        detail={
+            "blocker": "SERVER_ID_REQUIRED_FOR_GAMEPLAY_STATE",
+            "route": "/api/user/heroes",
+            "message": "server_id is required for server-bound gameplay roster reads.",
+        },
+    )
     # Nessun server_id -> legacy account-wide DEPRECATED. UI player-facing
     # devono passare server_id o bloccare onestamente.
     user_heroes = await db.user_heroes.find({"user_id": uid}).to_list(1000)

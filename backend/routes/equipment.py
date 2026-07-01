@@ -28,6 +28,15 @@ def register_equipment_routes(router, db, get_current_user, serialize_doc, calcu
         - server_id assente: legacy account-wide path (non-player-facing).
         """
         uid = current_user["id"]
+        if not server_id or not isinstance(server_id, str) or not server_id.strip():
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "blocker": "SERVER_ID_REQUIRED_FOR_GAMEPLAY_STATE",
+                    "route": "/api/user/equipment",
+                    "message": "server_id is required for server-bound equipment reads.",
+                },
+            )
         if server_id and isinstance(server_id, str) and server_id.strip():
             sid = server_id.strip()
             psp = await db.player_server_profiles.find_one({"user_id": uid, "server_id": sid})

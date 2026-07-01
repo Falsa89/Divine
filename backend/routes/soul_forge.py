@@ -145,6 +145,15 @@ def register_soul_forge_routes(router, db, get_current_user, serialize_doc, calc
         - Nessuna mutazione di balance.
         """
         uid = current_user["id"]
+        if not server_id or not isinstance(server_id, str) or not server_id.strip():
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "blocker": "SERVER_ID_REQUIRED_FOR_GAMEPLAY_STATE",
+                    "route": "/api/wallet",
+                    "message": "server_id is required for server-bound wallet reads.",
+                },
+            )
         user = await db.users.find_one({"id": uid})
         user_gold = user.get("gold", 0) if user else 0
         user_gems = user.get("gems", 0) if user else 0
