@@ -9,10 +9,51 @@ import Animated, {
   withTiming, Easing, FadeIn, FadeInDown, FadeInUp,
 } from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../context/AuthContext';
 import { COLORS } from '../constants/theme';
+import { apiCallWithMeta } from '../utils/api';
+import {
+  SELECTED_SERVER_ID_KEY,
+  SELECTED_SERVER_NAME_KEY,
+} from '../src/utils/authTokenCompat';
 
 const { width, height } = Dimensions.get('window');
+
+async function clearStoredServerSelection() {
+  await Promise.all([
+    AsyncStorage.removeItem(SELECTED_SERVER_ID_KEY).catch(() => {}),
+    AsyncStorage.removeItem(SELECTED_SERVER_NAME_KEY).catch(() => {}),
+  ]);
+}
+
+async function verifyStoredServerReadyForBoot(): Promise<boolean> {
+  const selected = (await AsyncStorage.getItem(SELECTED_SERVER_ID_KEY))?.trim();
+  if (!selected) {
+    await clearStoredServerSelection();
+    return false;
+  }
+
+  try {
+    const rosterMeta = await apiCallWithMeta<any>(
+      `/api/user/heroes?server_id=${encodeURIComponent(selected)}`,
+    );
+    const data = rosterMeta.data;
+    const heroes = Array.isArray(data)
+      ? data
+      : (data && Array.isArray(data.heroes) ? data.heroes : []);
+    const blocked = !!rosterMeta.diagnostics.blocker;
+    const emptyByHeader = rosterMeta.diagnostics.roster_count === 0;
+    if (blocked || emptyByHeader || heroes.length === 0) {
+      await clearStoredServerSelection();
+      return false;
+    }
+    return true;
+  } catch (_e) {
+    await clearStoredServerSelection();
+    return false;
+  }
+}
 
 export default function LoginScreen() {
   const { login, register, loading, user } = useAuth();
@@ -63,7 +104,6 @@ export default function LoginScreen() {
       // v103 — Skip redirect if v103_logout_in_progress flag set (logout race fix).
       (async () => {
         try {
-          const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
           const logoutInProgress = await AsyncStorage.getItem('v103_logout_in_progress');
           if (logoutInProgress === 'true') {
             // v103 — race fix: stiamo loggando out, non rimbalzare in /servers o home.
@@ -73,12 +113,8 @@ export default function LoginScreen() {
             }, 1500);
             return;
           }
-          const selected = await AsyncStorage.getItem('v101_selected_server_id');
-          if (!selected) {
-            router.replace('/servers');
-          } else {
-            router.replace('/(tabs)/home');
-          }
+          const serverReady = await verifyStoredServerReadyForBoot();
+          router.replace(serverReady ? '/(tabs)/home' : '/servers');
         } catch (_e) {
           router.replace('/servers');
         }
@@ -103,10 +139,8 @@ export default function LoginScreen() {
       else { await register(email, password, username); }
       // v101 — Routing post-login passa per /servers se non c'e' selezione server.
       try {
-        const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
-        const selected = await AsyncStorage.getItem('v101_selected_server_id');
-        if (!selected) { router.replace('/servers'); }
-        else { router.replace('/(tabs)/home'); }
+        const serverReady = await verifyStoredServerReadyForBoot();
+        router.replace(serverReady ? '/(tabs)/home' : '/servers');
       } catch (_e) { router.replace('/servers'); }
     } catch (e: any) { setError(e.message || 'Errore'); }
     finally { setSubmitting(false); }
