@@ -367,7 +367,7 @@ type GetFormationResponse = {
   filter_applied?: boolean;
   source?: string;
   profile_id?: string | null;
-  team_formation?: { user_hero_id?: string; x?: number; y?: number }[];
+  team_formation?: any[];
   // HOTFIX F — preferred shape: V1 normalized.
   team_formation_v1?: TeamFormationV1Slot[];
   team_formation_v1_warnings?: TeamFormationV1Warning[];
@@ -377,6 +377,34 @@ type GetFormationResponse = {
   fallback_used?: boolean;
   reason?: string;
 };
+
+function isTeamFormationV1Slot(entry: any): entry is TeamFormationV1Slot {
+  return !!(
+    entry
+    && typeof entry === 'object'
+    && entry.user_hero_id
+    && entry.canonical_id
+    && entry.col !== undefined
+    && entry.row !== undefined
+    && Number.isFinite(Number(entry.col))
+    && Number.isFinite(Number(entry.row))
+    && Number(entry.col) >= 0
+    && Number(entry.col) <= 2
+    && Number(entry.row) >= 0
+    && Number(entry.row) <= 2
+  );
+}
+
+function asTeamFormationV1(value: unknown): TeamFormationV1Slot[] | null {
+  if (!Array.isArray(value)) return null;
+  if (!value.every(isTeamFormationV1Slot)) return null;
+  return value.map((entry: any) => ({
+    user_hero_id: String(entry.user_hero_id),
+    canonical_id: String(entry.canonical_id),
+    col: Number(entry.col),
+    row: Number(entry.row),
+  }));
+}
 
 type PlayerFormationState = {
   team: EnemyUnit[];
@@ -680,9 +708,11 @@ export default function PreBattleLobbyScreen() {
         // catalog metadata (NON owned id). Se manca, fallback minimo a
         // team_formation legacy SOLO se la V1 non è arrivata; in ogni caso
         // NON costruiamo un team locale se il backend segnala blocker V1.
-        const tfV1Raw = Array.isArray((d as any).team_formation_v1)
-          ? (d as any).team_formation_v1
+        const tfV1Canonical = asTeamFormationV1((d as any).team_formation_v1);
+        const tfV1Compat = tfV1Canonical === null
+          ? asTeamFormationV1((d as any).team_formation)
           : null;
+        const tfV1Raw = tfV1Canonical ?? tfV1Compat;
         const tfWarnings: TeamFormationV1Warning[] =
           Array.isArray((d as any).team_formation_v1_warnings)
             ? (d as any).team_formation_v1_warnings

@@ -228,10 +228,12 @@ def create_team_formation_router(db, get_current_user):
                 "source": "saved_formation_server_scoped",
                 "fallback_used": False,
                 # HOTFIX E — esposizione duale:
-                #   - `team_formation`: forma canonica V1 normalizzata
-                #     (consumata da frontend e snapshot Pack 130).
+                #   - `team_formation_v1`: campo canonico del read contract.
+                #   - `team_formation`: alias compatibile già consumato da
+                #     frontend legacy e snapshot Pack 130.
                 #   - `team_formation_raw`: forma raw persistita (utile per QA
                 #     per ispezionare drift legacy senza DB query).
+                "team_formation_v1": v1_slots,
                 "team_formation": v1_slots,
                 "team_formation_raw": psp_team,
                 "team_formation_contract_version": TEAM_FORMATION_CONTRACT_VERSION,
