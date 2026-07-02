@@ -72,6 +72,8 @@ type ModeEncounter = {
   source_id: string;
   mode: string;
   encounter_id: string;
+  chapter_id?: string;
+  stage?: string;
   display_title: string;
   display_subtitle: string;
   enemies: EnemyUnit[];
@@ -79,6 +81,110 @@ type ModeEncounter = {
   runtime_generated: false;
   fallback_random_allowed: false;
 };
+
+const STORY_STAGE_SOURCE_TYPE = 'story_stage_encounter_table';
+const STORY_ENEMY_SOURCE_TYPE = 'authored';
+
+const STORY_ENCOUNTERS: ModeEncounter[] = [
+  {
+    source_type: STORY_STAGE_SOURCE_TYPE,
+    source_id: 'story_chapter_01_stage_01',
+    mode: 'story',
+    encounter_id: 'enc_story_1_1_intro_grunts',
+    chapter_id: '1',
+    stage: '1',
+    display_title: 'Capitolo 1 - Stage 1-1',
+    display_subtitle: 'Pattuglia di Avanguardia',
+    enemies: [
+      { hero_id: 'story_grunt_a', role: 'dps', level: 1, stars: 1, power: 800 },
+      { hero_id: 'story_grunt_b', role: 'dps', level: 1, stars: 1, power: 850 },
+      { hero_id: 'story_lieutenant', role: 'tank', level: 2, stars: 1, power: 1200 },
+    ],
+    is_random: false,
+    runtime_generated: false,
+    fallback_random_allowed: false,
+  },
+  {
+    source_type: STORY_STAGE_SOURCE_TYPE,
+    source_id: 'story_chapter_01_stage_02',
+    mode: 'story',
+    encounter_id: 'enc_story_1_2_outpost_guards',
+    chapter_id: '1',
+    stage: '2',
+    display_title: 'Capitolo 1 - Stage 1-2',
+    display_subtitle: 'Guardie dell Avamposto',
+    enemies: [
+      { hero_id: 'story_grunt_a', role: 'dps', level: 2, stars: 1, power: 950 },
+      { hero_id: 'story_grunt_b', role: 'dps', level: 2, stars: 1, power: 1000 },
+      { hero_id: 'story_lieutenant', role: 'tank', level: 3, stars: 1, power: 1500 },
+      { hero_id: 'alpha_story_hero_02', role: 'support', level: 2, stars: 1, power: 1100 },
+    ],
+    is_random: false,
+    runtime_generated: false,
+    fallback_random_allowed: false,
+  },
+  {
+    source_type: STORY_STAGE_SOURCE_TYPE,
+    source_id: 'story_chapter_02_boss',
+    mode: 'story',
+    encounter_id: 'enc_story_2_boss_dark_warden',
+    chapter_id: '2',
+    stage: 'boss',
+    display_title: 'Capitolo 2 - Boss',
+    display_subtitle: 'Dark Warden',
+    enemies: [
+      { hero_id: 'alpha_boss_hero_01', role: 'boss', level: 10, stars: 3, power: 5000 },
+    ],
+    is_random: false,
+    runtime_generated: false,
+    fallback_random_allowed: false,
+  },
+];
+
+function asRouteParam(value: unknown): string | null {
+  const raw = Array.isArray(value) ? value[0] : value;
+  const str = raw == null ? '' : String(raw).trim();
+  return str.length > 0 ? str : null;
+}
+
+function resolveStoryEncounter(params: Record<string, unknown>): { encounter: ModeEncounter | null; blocker: string | null } {
+  const sourceId = asRouteParam(params.source_id);
+  const encounterId = asRouteParam(params.encounter_id);
+  const enemySourceId = asRouteParam(params.enemy_source_id);
+  const sourceType = asRouteParam(params.source_type);
+  const enemySourceType = asRouteParam(params.enemy_source_type);
+  const chapterId = asRouteParam(params.chapter_id);
+  const stage = asRouteParam(params.stage);
+
+  if (!sourceId && !encounterId && !enemySourceId && !(chapterId && stage)) {
+    return { encounter: null, blocker: 'STORY_ENCOUNTER_PARAMS_REQUIRED' };
+  }
+
+  const byIdentifier = STORY_ENCOUNTERS.find((e) => (
+    e.source_id === sourceId
+    || e.encounter_id === encounterId
+    || e.source_id === enemySourceId
+    || e.encounter_id === enemySourceId
+  ));
+  const byStage = chapterId && stage
+    ? STORY_ENCOUNTERS.find((e) => e.chapter_id === chapterId && e.stage === stage)
+    : null;
+  const encounter = byIdentifier || byStage || null;
+
+  if (!encounter) return { encounter: null, blocker: 'STORY_ENCOUNTER_NOT_FOUND' };
+  if (sourceId && sourceId !== encounter.source_id) return { encounter, blocker: 'STORY_SOURCE_ID_MISMATCH' };
+  if (encounterId && encounterId !== encounter.encounter_id) return { encounter, blocker: 'STORY_ENCOUNTER_ID_MISMATCH' };
+  if (enemySourceId && enemySourceId !== encounter.source_id && enemySourceId !== encounter.encounter_id) {
+    return { encounter, blocker: 'STORY_ENEMY_SOURCE_ID_MISMATCH' };
+  }
+  if (sourceType && sourceType !== encounter.source_type) return { encounter, blocker: 'STORY_SOURCE_TYPE_MISMATCH' };
+  if (enemySourceType && enemySourceType !== STORY_ENEMY_SOURCE_TYPE && enemySourceType !== encounter.source_type) {
+    return { encounter, blocker: 'STORY_ENEMY_SOURCE_TYPE_MISMATCH' };
+  }
+  if (chapterId && chapterId !== encounter.chapter_id) return { encounter, blocker: 'STORY_CHAPTER_ID_MISMATCH' };
+  if (stage && stage !== encounter.stage) return { encounter, blocker: 'STORY_STAGE_MISMATCH' };
+  return { encounter, blocker: null };
+}
 
 const CANONICAL_ENCOUNTERS: Record<string, ModeEncounter> = {
   story: {
@@ -315,7 +421,7 @@ function SourceBadge({ enc }: { enc: ModeEncounter }) {
 
 export default function PreBattleLobbyScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ mode?: string; source_id?: string; encounter_id?: string; enemy_source_id?: string; enemy_source_type?: string; v108_pre?: string; is_preview?: string; reward_policy?: string; progress_policy?: string; battle_engine_mode?: string; floor_id?: string; opponent_id?: string; boss_id?: string; trial_id?: string; server_id?: string }>();
+  const params = useLocalSearchParams<{ mode?: string; source_type?: string; source_id?: string; encounter_id?: string; enemy_source_id?: string; enemy_source_type?: string; chapter_id?: string; stage?: string; v108_pre?: string; is_preview?: string; reward_policy?: string; progress_policy?: string; battle_engine_mode?: string; floor_id?: string; opponent_id?: string; boss_id?: string; trial_id?: string; server_id?: string }>();
   const modeParam = (params.mode || 'story').toString();
   const mode = (CANONICAL_ENCOUNTERS[modeParam] ? modeParam : 'story') as keyof typeof CANONICAL_ENCOUNTERS;
   // Pack 123 — Preview context fail-closed: TRUE solo se TUTTI i flag preview
@@ -333,10 +439,14 @@ export default function PreBattleLobbyScreen() {
   const previewFallbackActive = previewTeamSnapshot != null;
   // v108_pre — compatibility: story.tsx passa encounter_id / enemy_source_id;
   // legacy passa source_id. Normalizziamo qui senza riscrivere il flow.
-  const v108EncounterId = (params.encounter_id || params.source_id || '').toString();
   const v108EnemySourceId = (params.enemy_source_id || params.source_id || params.encounter_id || '').toString();
 
-  const encounter = CANONICAL_ENCOUNTERS[mode];
+  const storyEncounterResolution = useMemo(
+    () => (mode === 'story' ? resolveStoryEncounter(params as Record<string, unknown>) : { encounter: null, blocker: null }),
+    [mode, params.source_type, params.source_id, params.encounter_id, params.enemy_source_id, params.enemy_source_type, params.chapter_id, params.stage],
+  );
+  const encounterRouteBlocker = storyEncounterResolution.blocker;
+  const encounter = storyEncounterResolution.encounter || CANONICAL_ENCOUNTERS[mode];
   // Pack 79 keep: resolvePlayerFormation() rimane lo stato INIZIALE difensivo per v93.
   // Pack 80: il vero team viene caricato via /api/team/get-formation?server_id=<id>
   // dentro l'useEffect piu' avanti (real_player_team_fetch).
@@ -395,16 +505,19 @@ export default function PreBattleLobbyScreen() {
     (async () => {
       try {
         const res = await launchFromLobby({
-          server_id: (selectedServerId || 'unknown'), mode: (mode as 'story') || 'story',
-          encounter_id: String(v108EncounterId || params.source_id || mode), enemy_source_type: 'authored',
-          enemy_source_id: String(v108EnemySourceId || params.source_id || `${mode}_default`),
-          player_team_snapshot: playerTeam, client_trace_id: `v107d-${Date.now()}`,
+          server_id: (selectedServerId || 'unknown'),
+          mode: (mode as 'story') || 'story',
+          encounter_id: encounter.encounter_id,
+          enemy_source_type: mode === 'story' ? STORY_ENEMY_SOURCE_TYPE : 'authored',
+          enemy_source_id: mode === 'story' ? encounter.source_id : String(v108EnemySourceId || params.source_id || `${mode}_default`),
+          player_team_snapshot: playerTeam,
+          client_trace_id: `v107d-${Date.now()}`,
         });
         if (!cancelled && __DEV__) console.log('[v107D] lobby launch:', res.response_status);
       } catch (_e) { /* preview-only */ }
     })();
     return () => { cancelled = true; };
-  }, [mode, params.source_id, routeServerBlocker, v108EncounterId, v108EnemySourceId, playerTeam, previewFallbackActive, selectedServerLoaded, selectedServerId]);
+  }, [encounter.encounter_id, encounter.source_id, mode, params.source_id, routeServerBlocker, v108EnemySourceId, playerTeam, previewFallbackActive, selectedServerLoaded, selectedServerId]);
 
   // v95 — Endpoint runtime fetch (read-only catalog) per dichiarare la source attiva.
   //  - endpoint_active=true      → /api/encounter-source/get raggiunto e dati validi
@@ -579,18 +692,27 @@ export default function PreBattleLobbyScreen() {
     && !playerFormation.fallback_used
     && (playerFormation.team?.length || 0) > 0
   );
-  const authoredEncounterAvailable = !!(encounter && encounter.source_type === 'authored' && (encounter.enemies?.length || 0) > 0);
+  const authoredEncounterAvailable = !!(
+    encounter
+    && (encounter.enemies?.length || 0) > 0
+    && (
+      mode === 'story'
+        ? encounter.source_type === STORY_STAGE_SOURCE_TYPE && !encounterRouteBlocker
+        : encounter.source_type === 'authored'
+    )
+  );
   const selectedServerAvailable = !!(selectedServerLoaded && selectedServerId && !routeServerBlocker);
   const blockerReasons: string[] = [];
   if (!realPlayerTeamAvailable) blockerReasons.push('PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER');
-  if (!authoredEncounterAvailable) blockerReasons.push('AUTHORED_ENCOUNTER_SOURCE_PENDING');
+  if (encounterRouteBlocker) blockerReasons.push(encounterRouteBlocker);
+  else if (!authoredEncounterAvailable) blockerReasons.push('AUTHORED_ENCOUNTER_SOURCE_PENDING');
   if (routeServerBlocker) blockerReasons.push(routeServerBlocker);
   else if (!selectedServerAvailable) blockerReasons.push('SELECTED_SERVER_REQUIRED');
   const launchAllowedNormal = blockerReasons.length === 0;
   const qaFallbackEnabled = process.env.EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH === 'true';
   // Pack 5D-3B — preview/local fallback is blocked in the lobby. 5D-3C will
   // handle direct /combat/deeplink enforcement separately.
-  const launchDisabled = !selectedServerAvailable || (!launchAllowedNormal && !qaFallbackEnabled);
+  const launchDisabled = !selectedServerAvailable || !!encounterRouteBlocker || (!launchAllowedNormal && !qaFallbackEnabled);
 
   const startBattle = () => {
     if (previewFallbackActive) {
@@ -611,6 +733,15 @@ export default function PreBattleLobbyScreen() {
     }
     // v108_POSTQA_A — Bloccatore onesto: se non e' tutto reale, NON entrare in /combat
     // con fallback team/enemy spacciati per reali. Mostriamo i blocker.
+    if (encounterRouteBlocker) {
+      if (__DEV__) console.warn('[pack_6a][pre-battle-lobby] story encounter contract blocked:', {
+        blocker: encounterRouteBlocker,
+        source_id: params.source_id,
+        encounter_id: params.encounter_id,
+        enemy_source_id: params.enemy_source_id,
+      });
+      return;
+    }
     if (!launchAllowedNormal && !qaFallbackEnabled) {
       if (__DEV__) console.log('[v108_POSTQA_A] launch blocked:', blockerReasons);
       return;
@@ -648,6 +779,10 @@ export default function PreBattleLobbyScreen() {
       encounter_id: encounter.encounter_id,
       source_id: encounter.source_id,
       source_type: encounter.source_type,
+      enemy_source_type: mode === 'story' ? STORY_ENEMY_SOURCE_TYPE : encounter.source_type,
+      enemy_source_id: mode === 'story' ? encounter.source_id : v108EnemySourceId,
+      chapter_id: encounter.chapter_id || null,
+      stage: encounter.stage || null,
       qa_fallback_used: qaFallbackEnabled && !launchAllowedNormal,
       // HOTFIX G — V1 propagation: user_hero_id resta owned id primario;
       // canonical_id solo metadata.

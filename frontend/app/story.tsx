@@ -16,6 +16,31 @@ import useServerScope from '../src/hooks/useServerScope';
 
 const EC: Record<string,string> = { fire:'#ff4444', water:'#4488ff', earth:'#aa8844', wind:'#44cc88', light:'#ffd700', dark:'#9944ff', neutral:'#888' };
 
+type StoryEncounterRoute = {
+  source_type: 'story_stage_encounter_table';
+  source_id: string;
+  encounter_id: string;
+  enemy_source_type: 'authored';
+  enemy_source_id: string;
+};
+
+const STORY_ENCOUNTER_ROUTES: Record<string, StoryEncounterRoute> = {
+  '1:1': {
+    source_type: 'story_stage_encounter_table',
+    source_id: 'story_chapter_01_stage_01',
+    encounter_id: 'enc_story_1_1_intro_grunts',
+    enemy_source_type: 'authored',
+    enemy_source_id: 'story_chapter_01_stage_01',
+  },
+  '1:2': {
+    source_type: 'story_stage_encounter_table',
+    source_id: 'story_chapter_01_stage_02',
+    encounter_id: 'enc_story_1_2_outpost_guards',
+    enemy_source_type: 'authored',
+    enemy_source_id: 'story_chapter_01_stage_02',
+  },
+};
+
 export default function StoryScreen() {
   const router = useRouter();
   const { refreshUser } = useAuth();
@@ -70,15 +95,20 @@ export default function StoryScreen() {
       router.replace('/servers' as any);
       return;
     }
-    const encounterId = `story_${chId}_${stage}`;
+    const encounterRoute = STORY_ENCOUNTER_ROUTES[`${chId}:${stage}`];
+    if (!encounterRoute) {
+      Alert.alert('Battaglia non disponibile', 'STORY_ENCOUNTER_CATALOG_ENTRY_MISSING');
+      return;
+    }
     router.push({
       pathname: '/pre-battle-lobby',
       params: {
         mode: 'story',
-        source_id: encounterId,
-        encounter_id: encounterId,
-        enemy_source_type: 'authored',
-        enemy_source_id: encounterId,
+        source_type: encounterRoute.source_type,
+        source_id: encounterRoute.source_id,
+        encounter_id: encounterRoute.encounter_id,
+        enemy_source_type: encounterRoute.enemy_source_type,
+        enemy_source_id: encounterRoute.enemy_source_id,
         chapter_id: String(chId),
         stage: String(stage),
         server_id: selected_server_id,
