@@ -58,6 +58,13 @@ async def _resolve_user(authorization: Optional[str]) -> Optional[dict]:
 async def lobby_launch_context_preview(
     mode: str = Query(default='training'),
     server_id: Optional[str] = Query(default=None),
+    source_type: Optional[str] = Query(default=None),
+    source_id: Optional[str] = Query(default=None),
+    encounter_id: Optional[str] = Query(default=None),
+    enemy_source_type: Optional[str] = Query(default=None),
+    enemy_source_id: Optional[str] = Query(default=None),
+    chapter_id: Optional[str] = Query(default=None),
+    stage: Optional[str] = Query(default=None),
     authorization: Optional[str] = Header(default=None),
 ):
     """Pack 130 — launch context preview, read-only.
@@ -67,6 +74,8 @@ async def lobby_launch_context_preview(
     Args via query:
       mode: una delle training/story/boss/tower/event/arena.
       server_id: server context corrente del player (richiesto).
+      source_type/source_id/encounter_id/...: contract Story read-only
+        richiesto quando mode=story.
     """
     current_user = await _resolve_user(authorization)
     user_id = current_user.get('id') if current_user else None
@@ -86,7 +95,19 @@ async def lobby_launch_context_preview(
     # Lazy import per evitare cicli al boot.
     from server import db as _db
     from helpers.lobby_launch_context import build_lobby_launch_context
-    result = await build_lobby_launch_context(_db, user_id=user_id, server_id=server_id, mode=mode)
+    result = await build_lobby_launch_context(
+        _db,
+        user_id=user_id,
+        server_id=server_id,
+        mode=mode,
+        source_type=source_type,
+        source_id=source_id,
+        encounter_id=encounter_id,
+        enemy_source_type=enemy_source_type,
+        enemy_source_id=enemy_source_id,
+        chapter_id=chapter_id,
+        stage=stage,
+    )
     if not result.get('ok'):
         raise HTTPException(
             status_code=result.get('status_code', 400),
