@@ -51,6 +51,12 @@ import {
 // Direct expo-secure-store import rimosso (dead code). Vedi src/utils/authTokenCompat.ts.
 
 const PREVIEW_LOCAL_LOBBY_DISABLED_PRE_QA = 'PREVIEW_LOCAL_LOBBY_DISABLED_PRE_QA';
+const BACKEND_LAUNCH_CONTEXT_MISSING = 'BACKEND_LAUNCH_CONTEXT_MISSING';
+const BACKEND_LAUNCH_CONTEXT_SERVER_MISMATCH = 'BACKEND_LAUNCH_CONTEXT_SERVER_MISMATCH';
+const BACKEND_LAUNCH_CONTEXT_MODE_MISMATCH = 'BACKEND_LAUNCH_CONTEXT_MODE_MISMATCH';
+const BACKEND_LAUNCH_CONTEXT_PREVIEW_POLICY_REQUIRED = 'BACKEND_LAUNCH_CONTEXT_PREVIEW_POLICY_REQUIRED';
+const BACKEND_LAUNCH_CONTEXT_STORY_ENCOUNTER_MISMATCH = 'BACKEND_LAUNCH_CONTEXT_STORY_ENCOUNTER_MISMATCH';
+const BACKEND_LAUNCH_CONTEXT_TEAMFORMATION_V1_REQUIRED = 'BACKEND_LAUNCH_CONTEXT_TEAMFORMATION_V1_REQUIRED';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Inline catalog mirror — DETERMINISTIC, NO RUNTIME RANDOM
@@ -184,6 +190,59 @@ function resolveStoryEncounter(params: Record<string, unknown>): { encounter: Mo
   if (chapterId && chapterId !== encounter.chapter_id) return { encounter, blocker: 'STORY_CHAPTER_ID_MISMATCH' };
   if (stage && stage !== encounter.stage) return { encounter, blocker: 'STORY_STAGE_MISMATCH' };
   return { encounter, blocker: null };
+}
+
+function asRecord(value: unknown): Record<string, any> | null {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, any>)
+    : null;
+}
+
+function backendBlockerFromPayload(payload: any, fallback: string): string {
+  const detail = asRecord(payload?.detail);
+  return String(
+    detail?.blocker
+      || detail?.code
+      || payload?.blocker
+      || payload?.code
+      || fallback,
+  );
+}
+
+function validateBackendLaunchContext(
+  launchContext: unknown,
+  *,
+  expectedServerId: string,
+  expectedMode: string,
+  expectedEncounter: ModeEncounter,
+): { ok: true; launchContext: Record<string, any> } | { ok: false; blocker: string } {
+  const ctx = asRecord(launchContext);
+  if (!ctx) return { ok: false, blocker: BACKEND_LAUNCH_CONTEXT_MISSING };
+  if (String(ctx.server_id || '') !== expectedServerId) {
+    return { ok: false, blocker: BACKEND_LAUNCH_CONTEXT_SERVER_MISMATCH };
+  }
+  if (String(ctx.mode || '') !== expectedMode) {
+    return { ok: false, blocker: BACKEND_LAUNCH_CONTEXT_MODE_MISMATCH };
+  }
+  if (
+    ctx.reward_policy !== 'preview'
+    || ctx.progress_policy !== 'preview'
+    || ctx.battle_engine_mode !== 'preview'
+  ) {
+    return { ok: false, blocker: BACKEND_LAUNCH_CONTEXT_PREVIEW_POLICY_REQUIRED };
+  }
+  if (
+    String(ctx.source_id || '') !== expectedEncounter.source_id
+    || String(ctx.encounter_id || '') !== expectedEncounter.encounter_id
+    || String(ctx.enemy_source_type || '') !== STORY_ENEMY_SOURCE_TYPE
+    || String(ctx.enemy_source_id || '') !== expectedEncounter.source_id
+  ) {
+    return { ok: false, blocker: BACKEND_LAUNCH_CONTEXT_STORY_ENCOUNTER_MISMATCH };
+  }
+  if (!Array.isArray(ctx.team_formation_v1) || ctx.team_formation_v1.length === 0) {
+    return { ok: false, blocker: BACKEND_LAUNCH_CONTEXT_TEAMFORMATION_V1_REQUIRED };
+  }
+  return { ok: true, launchContext: ctx };
 }
 
 const CANONICAL_ENCOUNTERS: Record<string, ModeEncounter> = {
@@ -487,6 +546,20 @@ export default function PreBattleLobbyScreen() {
   // launch_context. Owned id primario = user_hero_id; canonical_id metadata.
   const [hotfixGTeamV1, setHotfixGTeamV1] = useState<TeamFormationV1Slot[]>([]);
   const [hotfixGTeamV1Warnings, setHotfixGTeamV1Warnings] = useState<TeamFormationV1Warning[]>([]);
+  const [backendLaunchBlocker, setBackendLaunchBlocker] = useState<string | null>(null);
+  const [backendLaunchLoading, setBackendLaunchLoading] = useState(false);
+
+  useEffect(() => {
+    setBackendLaunchBlocker(null);
+  }, [
+    mode,
+    routeServerId,
+    selectedServerId,
+    encounter.source_id,
+    encounter.encounter_id,
+    encounterRouteBlocker,
+    routeServerBlocker,
+  ]);
 
   useEffect(() => {
     if (previewFallbackActive) return;
@@ -708,13 +781,17 @@ export default function PreBattleLobbyScreen() {
   else if (!authoredEncounterAvailable) blockerReasons.push('AUTHORED_ENCOUNTER_SOURCE_PENDING');
   if (routeServerBlocker) blockerReasons.push(routeServerBlocker);
   else if (!selectedServerAvailable) blockerReasons.push('SELECTED_SERVER_REQUIRED');
+  const visibleBlockerReasons = backendLaunchBlocker
+    ? [...blockerReasons, backendLaunchBlocker]
+    : blockerReasons;
   const launchAllowedNormal = blockerReasons.length === 0;
   const qaFallbackEnabled = process.env.EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH === 'true';
   // Pack 5D-3B — preview/local fallback is blocked in the lobby. 5D-3C will
   // handle direct /combat/deeplink enforcement separately.
-  const launchDisabled = !selectedServerAvailable || !!encounterRouteBlocker || (!launchAllowedNormal && !qaFallbackEnabled);
+  const launchDisabled = backendLaunchLoading || !selectedServerAvailable || !!encounterRouteBlocker || (!launchAllowedNormal && !qaFallbackEnabled);
 
-  const startBattle = () => {
+  const startBattle = async () => {
+    setBackendLaunchBlocker(null);
     if (previewFallbackActive) {
       if (__DEV__) console.warn('[pack_5d_3b][pre-battle-lobby] preview_local launch blocked:', {
         blocker: PREVIEW_LOCAL_LOBBY_DISABLED_PRE_QA,
@@ -766,36 +843,63 @@ export default function PreBattleLobbyScreen() {
       });
       return;
     }
-    // v108_POSTQA_A / HOTFIX G — launch_context Battle Launch Contract v1
-    // ESTESO con team_formation_v1 (HOTFIX E contract) per consumo da
-    // combat.tsx senza fallback su snapshot locale.
-    const launchContext = {
-      battle_engine_mode: 'preview',
-      is_preview: true,
-      reward_policy: 'preview',
-      progress_policy: 'preview',
-      server_id: routeServerId || selectedServerId || 'unknown',
-      mode,
-      encounter_id: encounter.encounter_id,
-      source_id: encounter.source_id,
-      source_type: encounter.source_type,
-      enemy_source_type: mode === 'story' ? STORY_ENEMY_SOURCE_TYPE : encounter.source_type,
-      enemy_source_id: mode === 'story' ? encounter.source_id : v108EnemySourceId,
-      chapter_id: encounter.chapter_id || null,
-      stage: encounter.stage || null,
-      qa_fallback_used: qaFallbackEnabled && !launchAllowedNormal,
-      // HOTFIX G — V1 propagation: user_hero_id resta owned id primario;
-      // canonical_id solo metadata.
-      team_formation_v1: hotfixGTeamV1,
-      team_formation_v1_warnings: hotfixGTeamV1Warnings,
-      team_formation_v1_size: hotfixGTeamV1.length,
-      hotfix_g_frontend_v1_propagation: true,
-    };
-    const battle_launch_id = `v108_postqa_${Date.now()}`;
-    const target = `/combat?mode=${encodeURIComponent(mode)}&encounter_id=${encodeURIComponent(
-      encounter.encounter_id,
-    )}&source_id=${encodeURIComponent(encounter.source_id)}&launch_context=${encodeURIComponent(JSON.stringify(launchContext))}&battle_launch_id=${encodeURIComponent(battle_launch_id)}`;
-    router.push(target as any);
+    setBackendLaunchLoading(true);
+    try {
+      const { getAuthTokenCompat: _gtc } = await import('../src/utils/authTokenCompat');
+      const _lookup = await _gtc();
+      const token = _lookup.token;
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers.Authorization = `Bearer ${token}`;
+      const query = new URLSearchParams();
+      query.set('mode', mode);
+      query.set('server_id', selectedServerId || '');
+      query.set('source_type', asRouteParam(params.source_type));
+      query.set('source_id', asRouteParam(params.source_id));
+      query.set('encounter_id', asRouteParam(params.encounter_id));
+      query.set('enemy_source_type', asRouteParam(params.enemy_source_type));
+      query.set('enemy_source_id', asRouteParam(params.enemy_source_id));
+      query.set('chapter_id', asRouteParam(params.chapter_id));
+      query.set('stage', asRouteParam(params.stage));
+      const url = `${backendUrl}/api/lobby/launch-context/preview?${query.toString()}`;
+      const response = await fetch(url, { headers });
+      let payload: any = null;
+      try {
+        payload = await response.json();
+      } catch (_e) {
+        payload = null;
+      }
+      if (!response.ok) {
+        const blocker = backendBlockerFromPayload(payload, `BACKEND_LAUNCH_CONTEXT_HTTP_${response.status}`);
+        setBackendLaunchBlocker(blocker);
+        if (__DEV__) console.warn('[pack_6b_2][pre-battle-lobby] backend launch_context blocked:', blocker);
+        return;
+      }
+      const backendLaunchContext = asRecord(payload?.launch_context);
+      const validation = validateBackendLaunchContext(backendLaunchContext, {
+        expectedServerId: selectedServerId || '',
+        expectedMode: mode,
+        expectedEncounter: encounter,
+      });
+      if (!validation.ok) {
+        setBackendLaunchBlocker(validation.blocker);
+        if (__DEV__) console.warn('[pack_6b_2][pre-battle-lobby] backend launch_context invalid:', validation.blocker);
+        return;
+      }
+      const battle_launch_id = String(payload?.launch_context_id || `v130_${Date.now()}`);
+      const launchContext = validation.launchContext;
+      const target = `/combat?mode=${encodeURIComponent(String(launchContext.mode))}&server_id=${encodeURIComponent(
+        String(launchContext.server_id),
+      )}&encounter_id=${encodeURIComponent(String(launchContext.encounter_id))}&source_id=${encodeURIComponent(
+        String(launchContext.source_id),
+      )}&launch_context=${encodeURIComponent(JSON.stringify(launchContext))}&battle_launch_id=${encodeURIComponent(battle_launch_id)}`;
+      router.push(target as any);
+    } catch (_e: any) {
+      const blocker = _e?.message ? String(_e.message) : 'BACKEND_LAUNCH_CONTEXT_FETCH_FAILED';
+      setBackendLaunchBlocker(blocker);
+      if (__DEV__) console.warn('[pack_6b_2][pre-battle-lobby] backend launch_context fetch failed:', blocker);
+    } finally {
+      setBackendLaunchLoading(false);
+    }
   };
 
   const modifyTeam = () => {
@@ -910,7 +1014,9 @@ export default function PreBattleLobbyScreen() {
               disabled={launchDisabled}
             >
               <Text style={s.actionTxt}>{
-                previewFallbackActive
+                backendLaunchLoading
+                  ? '... Launch context'
+                  : previewFallbackActive
                   ? '\u26D4 Preview locale disabilitata'
                   : (!launchAllowedNormal && !qaFallbackEnabled)
                     ? '\u26D4 Launch bloccato'
@@ -920,11 +1026,11 @@ export default function PreBattleLobbyScreen() {
           </View>
 
           {/* v108_POSTQA_A — Blocker chain visibili e onesti. */}
-          {blockerReasons.length > 0 ? (
+          {visibleBlockerReasons.length > 0 ? (
             <View style={{ marginTop: 12, padding: 12, borderRadius: 8, backgroundColor: 'rgba(244,67,54,0.10)', borderWidth: 1, borderColor: 'rgba(244,67,54,0.40)' }}>
               <Text style={{ color: '#ff8a80', fontSize: 11, fontWeight: '800', letterSpacing: 1, marginBottom: 6 }}>LAUNCH BLOCKERS (v108_POSTQA_A)</Text>
-              {blockerReasons.map(b => (
-                <Text key={b} style={{ color: '#ffbcbc', fontSize: 10, fontWeight: '600', marginVertical: 1 }}>• {b}</Text>
+              {visibleBlockerReasons.map(b => (
+                <Text key={b} style={{ color: '#ffbcbc', fontSize: 10, fontWeight: '600', marginVertical: 1 }}>{`\u2022 ${b}`}</Text>
               ))}
               <Text style={{ color: '#999', fontSize: 9, marginTop: 6, lineHeight: 13 }}>Il fallback team/enemy non puo' essere spacciato come reale. Sblocca caricando team reale, encounter authored e selected server. QA fallback dietro flag EXPO_PUBLIC_ALLOW_QA_FALLBACK_BATTLE_LAUNCH.</Text>
             </View>
