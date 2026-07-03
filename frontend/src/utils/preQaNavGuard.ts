@@ -144,6 +144,10 @@ export const PRE_QA_ROUTE_ALLOWLIST: ReadonlySet<string> = new Set<string>([
   '/',
   '/index',
   // Tab core (home/menu/heroes/battle/gacha tab UI, gate logico altrove)
+  '/home',
+  '/menu',
+  '/heroes',
+  '/battle',
   '/(tabs)/home',
   '/(tabs)/menu',
   '/(tabs)/heroes',
@@ -154,6 +158,7 @@ export const PRE_QA_ROUTE_ALLOWLIST: ReadonlySet<string> = new Set<string>([
   '/hero-encyclopedia',
   '/hero-viewer',
   // Team editor + pre-battle lobby preview (gated via QA team save env)
+  '/story',
   '/pre-battle-lobby',
   '/combat',
   // Safe previews hub + design-only catalogs

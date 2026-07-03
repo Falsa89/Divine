@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Stack, usePathname, useRouter } from 'expo-router';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Stack, useGlobalSearchParams, usePathname, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from '../context/AuthContext';
 import { AuthProvider as V96AuthProvider } from '../src/auth/AuthContext';
@@ -8,14 +8,35 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { normalizeRoute } from '../src/utils/preQaNavGuard';
+import { interceptDeeplink } from '../src/utils/preQaDeeplinkGuard';
 import { verifySelectedServerScopeReadOnly } from '../src/hooks/useServerScope';
 
 const SERVER_GATE_EXEMPT_ROUTES = new Set<string>([
   '/',
   '/index',
   '/login',
+  '/register',
   '/servers',
 ]);
+const PRE_QA_ROUTE_GUARD_SAFE_REDIRECT = '/story';
+
+function buildPreQaGuardUrl(
+  pathname: string | null | undefined,
+  params: Record<string, string | string[] | undefined>,
+): string {
+  const path = pathname || '/';
+  const query = Object.keys(params || {})
+    .sort()
+    .flatMap((key) => {
+      const value = params[key];
+      const values = Array.isArray(value) ? value : [value];
+      return values
+        .filter((v): v is string => v !== undefined && v !== null)
+        .map((v) => `${encodeURIComponent(key)}=${encodeURIComponent(String(v))}`);
+    })
+    .join('&');
+  return query ? `${path}?${query}` : path;
+}
 
 function routeRequiresVerifiedServer(pathname: string | null | undefined): boolean {
   const normalized = normalizeRoute(pathname || '');
@@ -27,6 +48,13 @@ function routeRequiresVerifiedServer(pathname: string | null | undefined): boole
 function GlobalServerGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const params = useGlobalSearchParams<Record<string, string | string[] | undefined>>();
+  const routeGuardUrl = useMemo(
+    () => buildPreQaGuardUrl(pathname, params),
+    [pathname, params],
+  );
+  const routeGuard = useMemo(() => interceptDeeplink(routeGuardUrl), [routeGuardUrl]);
+  const routeAllowed = routeGuard.decision === 'ALLOW';
   const requiresServer = routeRequiresVerifiedServer(pathname);
   const [gateState, setGateState] = useState({
     pathname: '',
@@ -37,6 +65,20 @@ function GlobalServerGate({ children }: { children: React.ReactNode }) {
     (gateState.allowed && gateState.pathname === pathname);
 
   useEffect(() => {
+    if (routeAllowed) return;
+    setGateState({ pathname: pathname || '', allowed: false });
+    const safeRedirect = routeGuard.safeRedirect || PRE_QA_ROUTE_GUARD_SAFE_REDIRECT;
+    const blockedUrlHasQuery = routeGuardUrl.includes('?');
+    if (blockedUrlHasQuery || normalizeRoute(safeRedirect) !== normalizeRoute(pathname || '')) {
+      router.replace(safeRedirect as any);
+    }
+  }, [pathname, routeAllowed, routeGuard.safeRedirect, routeGuardUrl, router]);
+
+  useEffect(() => {
+    if (!routeAllowed) {
+      setGateState({ pathname: pathname || '', allowed: false });
+      return;
+    }
     let alive = true;
     async function verify() {
       if (!requiresServer) {
@@ -58,9 +100,9 @@ function GlobalServerGate({ children }: { children: React.ReactNode }) {
     return () => {
       alive = false;
     };
-  }, [pathname, requiresServer, router]);
+  }, [pathname, requiresServer, routeAllowed, router]);
 
-  if (requiresServer && !gateReady) {
+  if (!routeAllowed || (requiresServer && !gateReady)) {
     return (
       <View style={styles.gateContainer}>
         <ActivityIndicator color="#FF6B35" />

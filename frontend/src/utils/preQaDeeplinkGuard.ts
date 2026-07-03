@@ -1,4 +1,4 @@
-// Pack 128 — Pre-QA Deeplink Guard (helper puro, non ancora mountato a runtime).
+// Pack 128 / Pack 8A - Pre-QA Deeplink Guard.
 //
 // Scopo:
 //   Fornire una funzione pura `interceptDeeplink(url, opts)` che data una URL
@@ -11,9 +11,8 @@
 //   - non bypassa la blocklist Pack 112+ (PRE_QA_BLOCKED_PLAYER_ROUTES).
 //   - rispetta EXPO_PUBLIC_MENU_LEGACY_UNSAFE_VISIBLE come override
 //     coerente con il guard esistente.
-//   - NON e' mountato in _layout.tsx in Pack 128 per minimizzare touch UI.
-//     Vedi marker `pack_128_route_deeplink_lockdown_marker.json` per stato
-//     di enforcement (VALIDATED_ONLY_HELPER_NOT_MOUNTED).
+//   - montato in _layout.tsx dal Pack 8A per bloccare route/deeplink
+//     preview/local prima che le schermate target renderizzino.
 //
 // Categorie di errore strutturato (allineate alla §9 del prompt Pack 128):
 //   - 'locked'             : route nota ma in blocklist legacy/deferred
@@ -22,8 +21,7 @@
 //   - 'not_found'          : route non riconosciuta
 //   - 'legacy_disabled'    : route legacy disabilitata
 //
-// NB: questo file e' importato/letto solo da chi mountera' l'intercept guard
-// (Pack 128.x o Pack 129). In Pack 128 ne validiamo la presenza statica.
+// NB: questo file resta puro: decide la disposition, ma non naviga direttamente.
 
 import {
   classifyDeeplink,
@@ -48,7 +46,7 @@ export interface DeeplinkInterceptResult {
   safeRedirect?: string;
 }
 
-const SAFE_HOME_ROUTE = '/(tabs)/home';
+const SAFE_ALPHA_ROUTE = '/story';
 const PREVIEW_LOCAL_COMBAT_BLOCKER = 'PREVIEW_LOCAL_COMBAT_DEEPLINK_BLOCKED_PRE_QA';
 
 /** Parse minimo di una URL deeplink → path. Tollerante a scheme custom. */
@@ -64,9 +62,7 @@ export function extractPath(url: string): string {
   }
 }
 
-function hasPreviewLocalCombatQuery(url: string, path: string): boolean {
-  const normalized = normalizeRoute(path);
-  if (normalized !== '/combat') return false;
+function hasPreviewLocalPreQaQuery(url: string): boolean {
   let decoded = '';
   try {
     decoded = decodeURIComponent(url || '').toLowerCase();
@@ -102,7 +98,7 @@ export function interceptDeeplink(
       safeRedirect: '/login',
     };
   }
-  if (hasPreviewLocalCombatQuery(url, path)) {
+  if (hasPreviewLocalPreQaQuery(url)) {
     return {
       decision: 'SHOW_LOCKED',
       normalizedRoute: normalizeRoute(path),
@@ -127,7 +123,7 @@ export function interceptDeeplink(
         decision: 'REDIRECT_SAFE',
         normalizedRoute: normalized,
         errorCode: 'pre_qa_blocked',
-        safeRedirect: SAFE_HOME_ROUTE,
+        safeRedirect: SAFE_ALPHA_ROUTE,
         errorToken: PRE_QA_ROUTE_BLOCKED_TOKEN,
       };
     case 'BLOCKED_NOT_FOUND':
@@ -144,5 +140,5 @@ export function interceptDeeplink(
 export default {
   extractPath,
   interceptDeeplink,
-  SAFE_HOME_ROUTE,
+  SAFE_ALPHA_ROUTE,
 };
