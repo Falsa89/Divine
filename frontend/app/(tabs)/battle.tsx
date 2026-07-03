@@ -35,6 +35,44 @@ const ELEM_FILTERS = [
 
 type SortKey = 'rarity' | 'level' | 'power' | 'name';
 
+type FormationLoadStatus = 'idle' | 'loading' | 'ready' | 'empty' | 'blocked' | 'error' | 'skipped';
+
+type FormationLoadDiag = {
+  status: FormationLoadStatus;
+  http_status: number | null;
+  blocker: string | null;
+  detail: string | null;
+};
+
+const makeEmptyGrid = (): (any | null)[][] => [[null, null, null], [null, null, null], [null, null, null]];
+
+const initialFormationDiag: FormationLoadDiag = {
+  status: 'idle',
+  http_status: null,
+  blocker: null,
+  detail: null,
+};
+
+function apiErrorInfo(e: any, fallbackBlocker: string) {
+  if (e instanceof ApiError) {
+    const detail = e.data?.detail;
+    const structuredMessage =
+      detail && typeof detail === 'object'
+        ? (detail.message || detail.detail || detail.blocker || detail.code)
+        : null;
+    return {
+      http_status: e.status,
+      blocker: e.code || e.diagnostics?.blocker || fallbackBlocker,
+      detail: e.detail || structuredMessage || e.message || null,
+    };
+  }
+  return {
+    http_status: null,
+    blocker: fallbackBlocker,
+    detail: (e && e.message) || 'Errore sconosciuto.',
+  };
+}
+
 export default function BattleTab() {
   const router = useRouter();
   const { refreshUser, userHeroesVersion } = useAuth();
@@ -63,7 +101,8 @@ export default function BattleTab() {
     error_detail: string | null;
   }>({ status: null, diagnostics: null, error_code: null, error_detail: null });
   // grid[col][row] = hero | null  (col: 0=Support, 1=DPS, 2=Tank; row: 0,1,2)
-  const [grid, setGrid] = useState<(any | null)[][]>([[null, null, null], [null, null, null], [null, null, null]]);
+  const [grid, setGrid] = useState<(any | null)[][]>(makeEmptyGrid());
+  const [formationDiag, setFormationDiag] = useState<FormationLoadDiag>(initialFormationDiag);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   // Pre-QA Stabilization 116A — Battle Power foundation (read-only, derived,
@@ -181,6 +220,7 @@ export default function BattleTab() {
       // cambiano.
       if (serverScopeLoading || !serverScopeReady) {
         setLoading(true);
+        setFormationDiag({ ...initialFormationDiag, status: 'loading' });
         return;
       }
       // Pre-QA Stabilization 115C — fail-closed se manca server_id.
@@ -188,6 +228,13 @@ export default function BattleTab() {
       if (!selected_server_id) {
         setHeroes([]);
         setConstellations([]);
+        setGrid(makeEmptyGrid());
+        setFormationDiag({
+          status: 'skipped',
+          http_status: null,
+          blocker: 'SERVER_REQUIRED',
+          detail: 'Nessun server selezionato (pre-QA gate).',
+        });
         setRosterDiag({
           status: null,
           diagnostics: null,
@@ -201,11 +248,11 @@ export default function BattleTab() {
       // Pre-QA Stabilization 115C — strict team read: get-formation server-scoped.
       const teamUrl = `/api/team/get-formation?server_id=${encodeURIComponent(selected_server_id)}`;
       // HOTFIX B — leggiamo gli header diagnostici sul roster reader principale
-      // (`/api/user/heroes`). Gli altri due endpoint restano gestiti con
-      // fallback locale già in essere (team formation + constellations).
-      const [uhMeta, team, constData] = await Promise.all([
+      // (`/api/user/heroes`). Il fetch team formation NON viene piu'
+      // convertito in team vuoto su errore: un blocker resta blocker.
+      setFormationDiag({ ...initialFormationDiag, status: 'loading' });
+      const [uhMeta, constData] = await Promise.all([
         apiCallWithMeta<any>(heroesUrl),
-        apiCall(teamUrl).catch(() => ({ team_formation: [], formation: [], total_power: 0 })),
         apiCall('/api/constellations').catch(() => ({ constellations: [] })),
       ]);
       const uh = Array.isArray(uhMeta.data)
@@ -220,14 +267,44 @@ export default function BattleTab() {
       });
       const owned = (constData.constellations || []).filter((c: any) => c.owned);
       setConstellations(owned);
+      let team: any = null;
+      try {
+        team = await apiCall(teamUrl);
+      } catch (teamErr: any) {
+        const info = apiErrorInfo(teamErr, 'TEAM_FORMATION_LOAD_FAILED');
+        setGrid(makeEmptyGrid());
+        setFormationDiag({
+          status: 'error',
+          http_status: info.http_status,
+          blocker: info.blocker,
+          detail: info.detail,
+        });
+        if (__DEV__) console.warn('[pack_7b][battle.tsx] get-formation failed:', info);
+        setLoading(false);
+        return;
+      }
       if (team?.constellation_id) setSelectedConstellation(team.constellation_id);
+      const teamBlocker = typeof team?.blocker === 'string' ? team.blocker : null;
+      const emptyFormationFromBackend = teamBlocker === 'PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER';
+      const blockingFormationState = !!teamBlocker && !emptyFormationFromBackend;
+      if (blockingFormationState) {
+        setGrid(makeEmptyGrid());
+        setFormationDiag({
+          status: 'blocked',
+          http_status: null,
+          blocker: teamBlocker,
+          detail: typeof team?.reason === 'string' ? team.reason : "La formazione server-scoped e' bloccata.",
+        });
+        setLoading(false);
+        return;
+      }
 
       // Pack 126 FIX-A — Team formation contract repair (frontend adapter).
       // Backend POST /api/team/save-formation persiste come `team_formation`
       // con slot `{ hero_id, col, row }`. La risposta di GET /api/team/get-formation
       // puo' contenere `team_formation` (Pack 125+) o `formation` (legacy/Pack 87).
       // Normalizziamo entrambi e ricostruiamo la griglia con fallback robusto.
-      const savedFormation: any[] = (team?.team_formation || team?.formation || []) as any[];
+      const savedFormation: any[] = (team?.team_formation_v1 || team?.team_formation || team?.formation || []) as any[];
       if (savedFormation.length) {
         const ng: (any | null)[][] = [[null, null, null], [null, null, null], [null, null, null]];
         // Pre-QA Stabilization 116A-EXT FIX-A + Pack 126 FIX-A — Truth on team source/slot:
@@ -300,6 +377,22 @@ export default function BattleTab() {
         // Pre-QA Stabilization 116A — il power NON viene piu' letto da
         // `team.total_power` (sorgente legacy non versionata). Lo prendiamo
         // dall'hook 116A (`useBattlePowerSummary`) per coerenza pre-QA.
+        setFormationDiag({
+          status: 'ready',
+          http_status: null,
+          blocker: null,
+          detail: null,
+        });
+      } else {
+        setGrid(makeEmptyGrid());
+        setFormationDiag({
+          status: 'empty',
+          http_status: null,
+          blocker: emptyFormationFromBackend ? 'PLAYER_TEAM_NOT_CONFIGURED_FOR_SERVER' : null,
+          detail: emptyFormationFromBackend
+            ? 'Team non configurato per questo server: scegli eroi e salva una formazione.'
+            : null,
+        });
       }
       // Pack 126-FIX-B — QA debug trace (dev only, no PII).
       if (__DEV__) {
@@ -319,6 +412,14 @@ export default function BattleTab() {
       // server_scope, psp_lookup_mode, roster_count) invece di "Nessun eroe".
       if (__DEV__) console.warn('[hotfix_b][battle.tsx] loadTeamData failed:', e?.message || e);
       try { setHeroes([]); } catch (_se) {}
+      setGrid(makeEmptyGrid());
+      const info = apiErrorInfo(e, 'TEAM_SCREEN_LOAD_FAILED');
+      setFormationDiag({
+        status: 'error',
+        http_status: info.http_status,
+        blocker: info.blocker,
+        detail: info.detail,
+      });
       if (e instanceof ApiError) {
         setRosterDiag({
           status: e.status,
@@ -344,6 +445,24 @@ export default function BattleTab() {
   }, [grid]);
 
   const filledCount = placedIds.length;
+  const formationSaveBlocker = useMemo(() => {
+    if (serverScopeLoading || !serverScopeReady) return 'SERVER_SCOPE_NOT_READY';
+    if (!selected_server_id) return 'SERVER_REQUIRED';
+    if (formationDiag.status === 'idle' || formationDiag.status === 'loading') {
+      return 'TEAM_FORMATION_LOAD_PENDING';
+    }
+    if (formationDiag.status === 'error' || formationDiag.status === 'blocked' || formationDiag.status === 'skipped') {
+      return formationDiag.blocker || 'TEAM_FORMATION_NOT_READY';
+    }
+    return null;
+  }, [
+    formationDiag.blocker,
+    formationDiag.status,
+    selected_server_id,
+    serverScopeLoading,
+    serverScopeReady,
+  ]);
+  const saveDisabled = saving || filledCount === 0 || !!formationSaveBlocker;
 
   // Auto-filter by class based on active column
   const activeClassFilter = activeCell !== null ? COLUMNS[activeCell.col].role : null;
@@ -434,6 +553,13 @@ export default function BattleTab() {
       );
       return;
     }
+    if (formationSaveBlocker) {
+      Alert.alert(
+        'Formazione non pronta',
+        `${formationSaveBlocker}${formationDiag.detail ? `: ${formationDiag.detail}` : ''}`
+      );
+      return;
+    }
     // HOTFIX E — Payload TeamFormation V1.
     // Distinguiamo esplicitamente:
     //   - user_hero_id = h.id          (owned user_heroes.id)
@@ -513,7 +639,7 @@ export default function BattleTab() {
     }
   };
 
-  const clearAll = () => { setGrid([[null, null, null], [null, null, null], [null, null, null]]); setActiveCell({ col: 0, row: 0 }); };
+  const clearAll = () => { setGrid(makeEmptyGrid()); setActiveCell({ col: 0, row: 0 }); };
 
   const selConst = constellations.find(c => c.id === selectedConstellation);
 
@@ -567,13 +693,32 @@ export default function BattleTab() {
           <TouchableOpacity onPress={clearAll} style={s.clearBtn}>
             <Text style={s.clearTxt}>SVUOTA</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={saveTeam} disabled={saving} activeOpacity={0.7}>
-            <LinearGradient colors={filledCount > 0 ? [COLORS.accent, '#FF4444'] : ['#333', '#222']} style={[s.saveBtn, saving && { opacity: 0.5 }]}>
+          <TouchableOpacity onPress={saveTeam} disabled={saveDisabled} activeOpacity={0.7}>
+            <LinearGradient colors={!saveDisabled ? [COLORS.accent, '#FF4444'] : ['#333', '#222']} style={[s.saveBtn, saveDisabled && { opacity: 0.5 }]}>
               <Text style={s.saveTxt}>{saving ? '...' : '\u2714 SALVA'}</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
       </View>
+
+      {(formationDiag.status === 'empty' || formationDiag.status === 'blocked' || formationDiag.status === 'error' || formationDiag.status === 'skipped') && (
+        <View style={[
+          s.teamStatusBox,
+          formationDiag.status === 'empty' ? s.teamStatusInfo : s.teamStatusError,
+        ]}>
+          <Text style={s.teamStatusTitle}>
+            {formationDiag.status === 'empty' ? 'Team non configurato' : 'Formazione bloccata'}
+          </Text>
+          <Text style={s.teamStatusText}>
+            {formationDiag.detail || formationDiag.blocker || 'Caricamento formazione non riuscito.'}
+          </Text>
+          {formationDiag.blocker && (
+            <Text style={s.teamStatusCode}>
+              blocker: {formationDiag.blocker}{formationDiag.http_status ? ` · HTTP ${formationDiag.http_status}` : ''}
+            </Text>
+          )}
+        </View>
+      )}
 
       <View style={s.body}>
         {/* LEFT: 3x3 Grid */}
@@ -889,6 +1034,23 @@ const s = StyleSheet.create({
   title: { color: '#fff', fontSize: 13, fontWeight: '900', letterSpacing: 1.5 },
   headerMid: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   headerRight: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  teamStatusBox: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    gap: 2,
+  },
+  teamStatusInfo: {
+    backgroundColor: 'rgba(255,180,80,0.08)',
+    borderBottomColor: 'rgba(255,180,80,0.22)',
+  },
+  teamStatusError: {
+    backgroundColor: 'rgba(255,68,68,0.08)',
+    borderBottomColor: 'rgba(255,68,68,0.25)',
+  },
+  teamStatusTitle: { color: '#FFB347', fontSize: 9, fontWeight: '900', letterSpacing: 0.7 },
+  teamStatusText: { color: COLORS.textMuted, fontSize: 8, fontWeight: '700' },
+  teamStatusCode: { color: '#FFB347', fontSize: 8, fontFamily: 'monospace' },
   powerBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
     backgroundColor: 'rgba(255,215,0,0.1)', paddingHorizontal: 8, paddingVertical: 3,
